@@ -29,10 +29,19 @@ SECRET_KEY = os.environ.get(
 # DEBUG=1 включает отладку (локально). На сервере переменную не ставим → False.
 DEBUG = os.environ.get('DEBUG', '0') == '1'
 
-# Список доменов/IP через запятую: ALLOWED_HOSTS="example.ru,89.169.174.91"
-ALLOWED_HOSTS = os.environ.get(
-    'ALLOWED_HOSTS', 'localhost,127.0.0.1'
-).split(',')
+# Список доменов/IP через запятую: ALLOWED_HOSTS="th37.ru,www.th37.ru,51.250.107.69"
+ALLOWED_HOSTS = [
+    h.strip() for h in os.environ.get('ALLOWED_HOSTS', 'localhost,127.0.0.1').split(',') if h.strip()
+]
+
+# nginx терминирует HTTPS и проксирует http внутрь — доверяем его заголовку.
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Доверенные origin'ы для CSRF при отправке формы по HTTPS.
+# Пример: CSRF_TRUSTED_ORIGINS="https://th37.ru,https://www.th37.ru"
+CSRF_TRUSTED_ORIGINS = [
+    o.strip() for o in os.environ.get('CSRF_TRUSTED_ORIGINS', '').split(',') if o.strip()
+]
 
 
 # Application definition
