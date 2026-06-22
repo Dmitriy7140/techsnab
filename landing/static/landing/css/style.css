@@ -75,12 +75,12 @@ h2 { font-size: clamp(1.7rem, 3.2vw, 2.6rem); }
 .logo--light .logo__img { background: #fff; border-radius: 10px; padding: 4px 8px; box-shadow: var(--shadow-sm); }
 .logo--light .logo__text { color: #fff; }
 
-.nav { display: flex; gap: 26px; margin-left: auto; }
-.nav a { font-weight: 600; font-size: .96rem; color: var(--text); transition: color .15s; }
+.nav { display: flex; gap: 22px; margin-left: 32px; }
+.nav a { font-weight: 600; font-size: .96rem; color: var(--text); transition: color .15s; white-space: nowrap; }
 .nav a:hover { color: var(--blue); }
 
-.header__actions { display: flex; align-items: center; gap: 16px; }
-.header__phone { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; color: var(--ink); font-size: 1rem; }
+.header__actions { display: flex; align-items: center; gap: 16px; margin-left: auto; }
+.header__phone { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; color: var(--ink); font-size: 1rem; white-space: nowrap; }
 .header__phone .icon { color: var(--blue); font-size: 1.1em; }
 
 .burger { display: none; background: none; border: 0; width: 40px; height: 40px; cursor: pointer; flex-direction: column; justify-content: center; gap: 5px; }
