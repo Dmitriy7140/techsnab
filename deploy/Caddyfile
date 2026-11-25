@@ -1,0 +1,10 @@
+th37.ru {
+	encode zstd gzip
+	reverse_proxy production:8000
+}
+
+staging.th37.ru {
+	header X-Robots-Tag "noindex, nofollow"
+	encode zstd gzip
+	reverse_proxy staging:8000
+}
