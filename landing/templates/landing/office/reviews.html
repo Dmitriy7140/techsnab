@@ -1,8 +1,9 @@
 {% extends 'landing/office/base.html' %}
 {% block title %}Модерация отзывов{% endblock %}
-{% block content %}<h1>Модерация отзывов</h1>
+{% block content %}<div class="heading"><h1>Отзывы</h1>
+{% if perms.reviews.add_review and perms.reviews.change_review %}<a class="button-link" href="{% url 'landing:create_review' %}">Написать отзыв</a>{% endif %}</div>
 <nav class="tabs" aria-label="Статусы отзывов">{% for key,label,n in tabs %}<a href="?status={{ key }}" {% if key == status %}aria-current="page"{% endif %}>{{ label }} <b>{{ n }}</b></a>{% endfor %}</nav>
-{% for item in page %}<article class="panel moderation-card">
+{% for item in page %}<article class="panel moderation-card" id="review-{{ item.pk }}">
 <div class="heading"><h2>{{ item.name }}</h2><span class="stars" aria-label="{{ item.rating }} из 5">{{ item.stars }}</span></div>
 <p class="muted">Дата отзыва {{ item.review_date|date:"d.m.Y" }} · Получен {{ item.submitted_at|date:"d.m.Y H:i" }}</p>
 <p class="verbatim review-text">{{ item.comment }}</p>

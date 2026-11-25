@@ -21,6 +21,6 @@ sudo docker compose --env-file /opt/techsnab/.env up --build -d --no-deps stagin
 
 Заявки и статистика основного сайта хранятся в SQLite в постоянном томе `production_data`. Стейдж хранит свои заявки и аналитику в `staging_data`. График считает первое посещение браузера с согласием на аналитические cookie.
 
-Кабинет доступен на `https://admin.th37.ru/`. Менеджеру нужны флаг Django `is_staff`, права `landing.view_lead`, `landing.change_lead`, `landing.view_trafficevent`, `reviews.view_review` и `reviews.change_review`.
+Кабинет доступен на `https://admin.th37.ru/`. Менеджеру нужны флаг Django `is_staff`, права `landing.view_lead`, `landing.change_lead`, `landing.view_trafficevent`, `reviews.view_review`, `reviews.add_review` и `reviews.change_review`.
 
 Форма отзывов включается через `PUBLIC_REVIEWS=1` на стейдже. Кабинет модерирует отзывы в общем томе `reviews_data`, миграции которого выполняет production. Резервируйте SQLite-базы всех трёх томов.

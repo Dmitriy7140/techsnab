@@ -2,7 +2,9 @@
 <html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow"><meta name="color-scheme" content="only light">
 <title>{% block title %}CRM{% endblock %} · Техснаб</title>
-<link rel="icon" href="{% static 'landing/img/favicon.svg' %}"><link rel="stylesheet" href="{% static 'landing/css/crm.css' %}">
+{% include 'landing/icons.html' %}
+<link rel="stylesheet" href="{% static 'landing/css/crm.css' %}">
+{% block extra_css %}{% endblock %}
 </head><body>
 <header class="office-head"><div class="wrap office-row">
     <a class="brand" href="{% url 'landing:crm' %}"><img src="{% static 'landing/img/logo.png' %}" width="46" height="32" alt="">Техснаб <span>CRM</span></a>

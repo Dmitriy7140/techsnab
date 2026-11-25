@@ -12,12 +12,12 @@ from django.db.models import Count, F, Q
 from django.db.models.functions import ExtractDay, ExtractHour, ExtractMonth
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse_lazy
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
 from django.views.decorators.cache import never_cache
-from django.views.decorators.http import require_POST
+from django.views.decorators.http import require_http_methods, require_POST
 
-from .forms import LeadUpdateForm, ManagerLoginForm, RussianDateField
+from .forms import LeadUpdateForm, ManagerLoginForm, ManagerReviewForm, RussianDateField
 from .models import FirstVisit, Lead, TrafficEvent
 from .reviews.models import Review
 
@@ -153,6 +153,24 @@ def reviews(request):
     counts = dict(Review.objects.order_by().values('status').annotate(n=Count('pk')).values_list('status', 'n'))
     tabs = [(key, label, counts.get(key, 0)) for key, label in Review.Status.choices]
     return render(request, 'landing/office/reviews.html', {'section': 'reviews', 'page': page, 'status': status, 'tabs': tabs})
+
+
+@manager_access('reviews.view_review', 'reviews.add_review', 'reviews.change_review')
+@require_http_methods(['GET', 'POST'])
+def create_review(request):
+    form = ManagerReviewForm(request.POST if request.method == 'POST' else None, prefix='review')
+    if request.method == 'POST' and form.is_valid():
+        now = timezone.now()
+        review, created = form.save(
+            submitted_at=now, review_date=form.cleaned_data['review_date'], status=Review.Status.APPROVED,
+            moderated_at=now, moderated_by=request.user.get_username(),
+        )
+        if created:
+            messages.success(request, 'Отзыв опубликован.')
+        else:
+            messages.info(request, 'Этот отзыв уже сохранён.')
+        return redirect(f"{reverse('landing:crm_reviews')}?status={review.status}#review-{review.pk}")
+    return render(request, 'landing/office/create_review.html', {'section': 'reviews', 'review_form': form})
 
 
 @manager_access('reviews.view_review', 'reviews.change_review')

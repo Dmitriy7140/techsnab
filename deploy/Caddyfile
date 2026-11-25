@@ -10,7 +10,7 @@ admin.th37.ru {
 	encode zstd gzip
 	redir / /crm/ 302
 	redir /crm /crm/ 302
-	@office path /crm/* /admin/* /static/*
+	@office path /crm/* /admin/* /static/* /favicon.ico
 	handle @office {
 		reverse_proxy production:8000
 	}

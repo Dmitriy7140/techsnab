@@ -6,6 +6,7 @@ from django.http import Http404, HttpResponse
 from django.core.paginator import Paginator
 from django.utils import timezone
 from django.shortcuts import redirect, render
+from django.templatetags.static import static
 
 from .forms import RequestForm, ReviewForm
 from .models import Lead
@@ -95,13 +96,10 @@ def index(request):
     review_form = None
     published = None
     if settings.PUBLIC_REVIEWS:
-        review_form = ReviewForm(request.POST if is_review else None, prefix='review',
-                                 initial={'submission_id': uuid4(), 'review_date': timezone.localdate()})
+        review_form = ReviewForm(request.POST if is_review else None, prefix='review')
         if is_review and review_form.is_valid():
-            data = review_form.cleaned_data
-            Review.objects.get_or_create(submission_id=data['submission_id'] or uuid4(), defaults={
-                name: data[name] for name in ('name', 'rating', 'comment', 'review_date')
-            })
+            now = timezone.now()
+            review_form.save(submitted_at=now, review_date=timezone.localdate(now))
             messages.success(request, 'Спасибо! Отзыв отправлен на модерацию.', extra_tags='review')
             return redirect(f'{request.path}#reviews')
         approved = Review.objects.filter(status=Review.Status.APPROVED).order_by('-review_date', '-pk')
@@ -145,3 +143,7 @@ def robots(request):
 
 def sitemap(request):
     return render(request, 'landing/sitemap.xml', {'site': settings.SITE}, content_type='application/xml')
+
+
+def favicon(request):
+    return redirect(static('landing/img/favicon.ico'))

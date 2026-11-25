@@ -1,0 +1,13 @@
+{% extends 'landing/office/base.html' %}
+{% load static %}
+{% block title %}Новый отзыв{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'landing/css/feedback.css' %}">{% endblock %}
+{% block content %}
+<a class="back" href="{% url 'landing:crm_reviews' %}">← Все отзывы</a>
+<div class="heading"><h1>Новый отзыв</h1></div>
+<form class="review-form manager-review" method="post">
+    {% csrf_token %}
+    {% include 'landing/review_fields.html' %}
+    <button type="submit" class="primary">Опубликовать</button>
+</form>
+{% endblock %}

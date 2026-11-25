@@ -9,6 +9,7 @@ app_name = 'landing'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('favicon.ico', views.favicon, name='favicon'),
     path('robots.txt', views.robots, name='robots'),
     path('sitemap.xml', views.sitemap, name='sitemap'),
     path('events/', traffic.record, name='events'),
@@ -19,6 +20,7 @@ urlpatterns = [
     path('crm/leads/', crm.leads, name='crm_leads'),
     path('crm/leads/<int:pk>/', crm.lead_detail, name='lead_detail'),
     path('crm/reviews/', crm.reviews, name='crm_reviews'),
+    path('crm/reviews/new/', crm.create_review, name='create_review'),
     path('crm/reviews/<int:pk>/moderate/', crm.moderate, name='moderate'),
     path('admin/', RedirectView.as_view(pattern_name='landing:crm')),
     path('admin/login/', RedirectView.as_view(pattern_name='landing:crm_login')),
