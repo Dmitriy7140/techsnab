@@ -22,6 +22,7 @@
 .review-score { display: block; color: #975600; letter-spacing: .12em; margin: 5px 0; }
 .review-form { border: 1px solid #a7b8c2; border-top: 3px solid #205b82; padding: clamp(18px, 3vw, 36px); display: grid; gap: 16px; }
 .review-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.review-date-hint { display: block; margin-top: 5px; color: #526572; font-size: .8rem; line-height: 1.4; }
 .review-form label, .review-form legend { font-size: .9rem; font-weight: 650; }
 .review-form input:not([type=radio]), .review-form textarea { display: block; width: 100%; margin-top: 5px; padding: 10px 12px; border: 1px solid #90a4ae; background: #fff; color: #192e38; font: inherit; }
 .review-form textarea { resize: vertical; }

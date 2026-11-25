@@ -20,8 +20,15 @@
                 <h3>Оставить отзыв</h3>
                 {% for message in messages %}{% if 'review' in message.tags %}<p role="status" class="alert alert--success">{{ message }}</p>{% endif %}{% endfor %}
                 {% csrf_token %}<input type="hidden" name="form_kind" value="review">{{ review_form.submission_id }}{{ review_form.submission_id.errors }}
-                <div class="review-fields"><label>Имя{{ review_form.name }}{{ review_form.name.errors }}</label>
-                    <label>Дата отзыва{{ review_form.review_date }}{{ review_form.review_date.errors }}</label></div>
+                <div class="review-fields">
+                    <label>Имя{{ review_form.name }}{{ review_form.name.errors }}</label>
+                    <div>
+                        <label for="{{ review_form.review_date.id_for_label }}">{{ review_form.review_date.label }}</label>
+                        {{ review_form.review_date }}
+                        <small class="review-date-hint" id="{{ review_form.review_date.auto_id }}_helptext">{{ review_form.review_date.help_text }}</small>
+                        {{ review_form.review_date.errors }}
+                    </div>
+                </div>
                 <fieldset><legend>Оценка</legend><div class="star-picker">
                     {% for n in "12345" %}<label><input type="radio" name="{{ review_form.rating.html_name }}" value="{{ n }}" required {% if review_form.rating.value|stringformat:"s" == n %}checked{% endif %}><span aria-hidden="true">★</span><span class="sr-only">{{ n }} из 5</span></label>{% endfor %}
                 </div>{{ review_form.rating.errors }}</fieldset>

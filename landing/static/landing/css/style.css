@@ -126,12 +126,6 @@ h3 { font-size: 1.25rem; letter-spacing: -.025em; }
 .hero__cta .btn--primary span { font-size: 1.3em; line-height: 1; }
 .truck-photo { border: 1px solid var(--edge); background: var(--wash); }
 .truck-photo img { width: 100%; height: auto; }
-.truck-photo figcaption {
-    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px 14px;
-    padding: 11px 16px; border-top: 1px solid var(--edge);
-    color: var(--text); font-size: .8125rem; font-weight: 700;
-}
-.truck-photo a { text-decoration: underline; text-underline-offset: .16em; }
 
 .stats { background: var(--wash); border-block: 1px solid var(--edge); }
 .stats__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -156,6 +150,16 @@ h3 { font-size: 1.25rem; letter-spacing: -.025em; }
 .card, .step { padding: clamp(20px, 2.2vw, 34px); border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); background: var(--paper); }
 .card__meta { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 19px; }
 .card__icon { width: 29px; height: 29px; color: var(--blue); }
+.advantages-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(12px, 1.5vw, 20px);
+    max-width: 64rem;
+    margin-inline: auto;
+}
+.card--feature { grid-column: span 2; border: 1px solid var(--rule); border-top: 2px solid var(--ink); }
+.card--feature:first-child { grid-column: 2 / span 2; }
+#why .section__head h2 { margin-inline: auto; text-align: center; }
 .card--feature .card__icon { margin-bottom: 18px; }
 .formula { color: var(--blue); font: 600 .875rem/1.4 ui-monospace, Consolas, monospace; }
 .card p, .step p { margin-top: 9px; color: var(--text); font-size: .95rem; }
@@ -194,6 +198,10 @@ h3 { font-size: 1.25rem; letter-spacing: -.025em; }
 .footer { padding-block: 48px 24px; border-top: 1px solid var(--edge); background: var(--paper); }
 .footer__inner { display: grid; grid-template-columns: 1.5fr .7fr 1fr; gap: 32px; padding-bottom: 34px; }
 .footer__brand p { max-width: 38ch; margin-top: 16px; color: var(--text); font-size: .9rem; }
+.photo-credit { margin-top: 12px; color: var(--text); font-size: .8rem; }
+.photo-credit summary { width: fit-content; cursor: pointer; }
+.photo-credit p { margin-top: 5px; font-size: inherit; overflow-wrap: anywhere; }
+.photo-credit a { text-decoration: underline; text-underline-offset: .16em; }
 .footer__col h4 { margin-bottom: 13px; font-size: 1rem; }
 .footer__col a, .footer__col span { display: block; width: fit-content; margin-top: 6px; color: var(--text); font-size: .9rem; }
 .footer__bottom { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; padding-top: 18px; border-top: 1px solid var(--rule); color: var(--text); font-size: .8rem; }
@@ -241,7 +249,9 @@ h3 { font-size: 1.25rem; letter-spacing: -.025em; }
     .hero__lead { margin-top: 18px; }
     .hero__cta { margin-top: 22px; }
     .hero__cta .btn { flex: 1 1 13rem; }
-    .stats__grid, .cards, .form__row, .footer__inner { grid-template-columns: 1fr; }
+    .stats__grid, .cards, .form__row, .footer__inner, .advantages-grid { grid-template-columns: 1fr; }
+    .card--feature, .card--feature:first-child { grid-column: auto; }
+    #why .section__head h2 { margin-inline: 0; text-align: left; }
     .stat { display: grid; grid-template-columns: minmax(100px, .72fr) 1fr; align-items: center; padding: 15px 0; }
     .stat + .stat { border-left: 0; border-top: 1px solid var(--rule); padding-left: 0; }
     .stat__label { max-width: 24ch; }

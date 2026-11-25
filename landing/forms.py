@@ -24,7 +24,7 @@ class ReviewForm(forms.Form):
     submission_id = forms.UUIDField(required=False, widget=forms.HiddenInput)
     name = forms.CharField(label='Имя', max_length=120, widget=forms.TextInput(attrs={'autocomplete': 'name'}))
     rating = forms.TypedChoiceField(label='Оценка', coerce=int, choices=[(n, str(n)) for n in range(1, 6)])
-    review_date = RussianDateField(label='Дата отзыва')
+    review_date = RussianDateField(label='Дата отзыва', help_text='Можно указать прошлую или будущую дату.')
     comment = forms.CharField(label='Комментарий', max_length=10000, widget=forms.Textarea(attrs={'rows': 4}))
 
 

@@ -170,7 +170,8 @@ class ReviewTests(TestCase):
         for _ in range(2):
             self.assertRedirects(guest.post('/', data), '/#reviews', fetch_redirect_response=False)
         first = Review.objects.get()
-        second = {**data, 'review-submission_id': str(uuid4()), 'review-comment': 'Вторая отправка'}
+        second = {**data, 'review-submission_id': str(uuid4()), 'review-comment': 'Вторая отправка',
+                  'review-review_date': '31.12.2099'}
         guest.post('/', second)
         self.assertEqual(Review.objects.count(), 2)
         self.assertNotContains(guest.get('/'), data['review-comment'])
@@ -194,6 +195,9 @@ class ReviewTests(TestCase):
         self.assertEqual((first.status, first.moderated_by), ('approved', 'Nick'))
         self.client.post(moderate, {'status': 'rejected', 'revision': 1})
         self.assertNotContains(guest.get('/'), data['review-comment'])
+        future = Review.objects.get(submission_id=second['review-submission_id'])
+        self.client.post(reverse('landing:moderate', args=[future.pk]), {'status': 'approved', 'revision': 0})
+        self.assertContains(guest.get('/'), '<time datetime="2099-12-31">31.12.2099</time>', html=True)
 
     @override_settings(PUBLIC_REVIEWS=False)
     def test_review_submissions_are_staging_only(self):
