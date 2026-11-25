@@ -1,3 +1,7 @@
+http://www.th37.ru, https://www.th37.ru {
+	redir https://th37.ru{uri} permanent
+}
+
 th37.ru {
 	@office path /crm /crm/* /admin /admin/*
 	respond @office 404

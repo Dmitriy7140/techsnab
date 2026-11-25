@@ -90,6 +90,7 @@ def record(request):
             reverse('landing:caustic'), '/', '/#products', '/#contact',
             '#products', '#how', '#why', '#contact', '#reviews', '#top', 'menu', 'request-form', 'review-form', 'review-page',
             'tel:' + site['phone_href'], 'tel:' + site['phone_city_href'], 'mailto:' + site['email'],
+            site['map_url'],
             'https://commons.wikimedia.org/?curid=78303301', 'https://creativecommons.org/licenses/by/2.0/',
         }
         if data.get('target') not in targets:

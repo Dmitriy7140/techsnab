@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 import os
 from pathlib import Path
+from urllib.parse import urlencode
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -155,6 +156,9 @@ STORAGES = {
 }
 
 # Contact details shown across the landing.
+# Public ownership token served at the domain root for IndexNow crawlers.
+INDEXNOW_KEY = '997c3accc5335bfae77298db7d9b3fa4'
+
 SITE = {
     'url': 'https://th37.ru',
     'company': 'ТЕХСНАБ-ХОЛДИНГ',
@@ -172,3 +176,4 @@ SITE = {
     'inn': 'ИНН 3702077585 / КПП 370201001',
     'ogrn': 'ОГРН 1053701162558',
 }
+SITE['map_url'] = 'https://yandex.ru/maps/?' + urlencode({'text': SITE['address']})
