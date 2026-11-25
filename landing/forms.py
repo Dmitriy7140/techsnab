@@ -69,7 +69,10 @@ class RequestForm(forms.Form):
     )
     phone = forms.CharField(
         max_length=40,
-        widget=forms.TextInput(attrs={'placeholder': '+7 (___) ___-__-__'}),
+        widget=forms.TextInput(attrs={
+            'type': 'tel', 'autocomplete': 'tel', 'inputmode': 'tel',
+            'placeholder': '+7 (___) ___-__-__', 'data-ru-phone': '',
+        }),
     )
     cargo = forms.CharField(
         max_length=200,
@@ -85,3 +88,16 @@ class RequestForm(forms.Form):
             attrs={'placeholder': 'Маршрут, объём, сроки', 'rows': 3}
         ),
     )
+
+    def clean_phone(self):
+        value = self.cleaned_data['phone']
+        if re.fullmatch(r'\+7[\s()-]*', value):
+            raise ValidationError('Введите номер телефона.')
+        if not re.fullmatch(r'\+?[0-9\s()-]+', value) or (value.startswith('+') and not value.startswith('+7')):
+            return value
+        digits = re.sub(r'\D', '', value)
+        if len(digits) == 11 and digits[0] in '78':
+            digits = digits[1:]
+        elif len(digits) != 10 or value.startswith('+'):
+            return value
+        return f'+7 ({digits[:3]}) {digits[3:6]}-{digits[6:8]}-{digits[8:]}'

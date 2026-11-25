@@ -9,6 +9,7 @@ app_name = 'landing'
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('produkciya/kausticheskaya-soda/', views.caustic, name='caustic'),
     path('favicon.ico', views.favicon, name='favicon'),
     path('robots.txt', views.robots, name='robots'),
     path('sitemap.xml', views.sitemap, name='sitemap'),

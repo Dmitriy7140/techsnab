@@ -6,6 +6,7 @@ from django.db import transaction
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.middleware.csrf import get_token
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.crypto import salted_hmac
 from django.views.decorators.http import require_POST
@@ -41,7 +42,10 @@ def consent(request):
         return HttpResponseBadRequest()
     if consent_state(request) == 'private':
         choice = 'deny'
-    response = HttpResponse(status=204) if request.headers.get('Accept') == 'application/json' else redirect('landing:index')
+    page = request.POST.get('page')
+    if page not in (reverse('landing:index'), reverse('landing:caustic')):
+        page = reverse('landing:index')
+    response = HttpResponse(status=204) if request.headers.get('Accept') == 'application/json' else redirect(page)
     options = {'max_age': COOKIE_AGE, 'secure': request.is_secure(), 'httponly': True, 'samesite': 'Lax'}
     response.set_signed_cookie('th37_consent', choice, salt='analytics-choice', **options)
     response.headers['Cache-Control'] = 'private, no-store'
@@ -62,7 +66,7 @@ def consent(request):
         with transaction.atomic():
             _, first = FirstVisit.objects.get_or_create(visitor=visitor)
             if first:
-                TrafficEvent.objects.create(event_id=uuid4(), kind='view', visitor=visitor, source=source[:253], target='/')
+                TrafficEvent.objects.create(event_id=uuid4(), kind='view', visitor=visitor, source=source[:253], target=page)
     response.set_signed_cookie('th37_visitor', str(visitor), salt='traffic', **options)
     return response
 
@@ -83,6 +87,7 @@ def record(request):
     if kind == TrafficEvent.Kind.CLICK:
         site = settings.SITE
         targets = {
+            reverse('landing:caustic'), '/', '/#products', '/#contact',
             '#products', '#how', '#why', '#contact', '#reviews', '#top', 'menu', 'request-form', 'review-form', 'review-page',
             'tel:' + site['phone_href'], 'tel:' + site['phone_city_href'], 'mailto:' + site['email'],
             'https://commons.wikimedia.org/?curid=78303301', 'https://creativecommons.org/licenses/by/2.0/',

@@ -164,6 +164,8 @@ h3 { font-size: 1.25rem; letter-spacing: -.025em; }
 .card--feature .card__icon { margin-bottom: 18px; }
 .formula { color: var(--blue); font: 600 .875rem/1.4 ui-monospace, Consolas, monospace; }
 .card p, .step p { margin-top: 9px; color: var(--text); font-size: .95rem; }
+.card--product h3 a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .18em; }
+.card--product h3 a:hover { color: var(--blue); }
 .steps { list-style: none; grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .step { padding-inline: clamp(16px, 1.6vw, 25px); }
 .step__num { display: block; margin-bottom: 21px; color: var(--blue); font: 600 1rem/1.2 ui-monospace, Consolas, monospace; }

@@ -2,6 +2,7 @@
     <h2 id="cookie-title">Разрешить cookie?</h2>
     <p>Это нужно для лучшей работы сайта.</p>
     <form action="{% url 'landing:consent' %}" method="post">{% csrf_token %}
+        <input type="hidden" name="page" value="{{ request.path }}">
         <button name="choice" value="allow">Разрешить</button>
         <button name="choice" value="deny">Отказаться</button>
     </form>

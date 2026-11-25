@@ -16,7 +16,7 @@
 .review-list, .review-form { min-width: 0; }
 .review-card { padding: 18px 0; border-top: 1px solid #afbec7; }
 .review-by, .review-pages { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 12px; }
-.review-by time, .review-hint, .review-empty { color: #526572; font-size: .9rem; }
+.review-by time, .review-empty { color: #526572; font-size: .9rem; }
 .review-card p { white-space: pre-wrap; overflow-wrap: anywhere; }
 .review-by strong { overflow-wrap: anywhere; }
 .review-score { display: block; color: #975600; letter-spacing: .12em; margin: 5px 0; }

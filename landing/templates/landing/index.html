@@ -57,8 +57,8 @@
     <div class="container hero__inner">
         <div class="hero__content">
             <p class="hero__kicker">Прямые поставки со склада</p>
-            <h1>Поставка <span class="hero__product">химической продукции</span> из&nbsp;Иваново</h1>
-            <p class="hero__lead">Поставляем каустическую соду, перекись водорода, кислоты и реагенты. Доставляем по Ивановской области, в соседние регионы и Москву.</p>
+            <h1><span class="hero__product">Промышленная химия</span> в&nbsp;Иваново</h1>
+            <p class="hero__lead">Поставляем оптом каустическую соду, перекись водорода, кислоты и реагенты. Доставляем со склада в Иваново по области, в соседние регионы и Москву.</p>
             <div class="hero__cta">
                 <a href="#contact" class="btn btn--primary">Рассчитать стоимость <span aria-hidden="true">→</span></a>
                 <a href="tel:{{ site.phone_href }}" class="btn btn--ghost">
@@ -86,7 +86,7 @@
 <section class="section" id="products">
     <div class="container">
         <div class="section__head">
-            <h2>Каталог продукции</h2>
+            <h2>Химическое сырьё и реагенты оптом</h2>
             <p>Химическое сырьё, реагенты и удобрения со склада в Иваново. Отгружаем наливом и в таре, согласуем объём и срок доставки.</p>
         </div>
         <div class="cards">
@@ -96,7 +96,7 @@
                     <svg class="card__icon icon" aria-hidden="true"><use href="#icon-{{ p.icon }}"/></svg>
                     {% if p.formula %}<span class="formula">{{ p.formula }}</span>{% endif %}
                 </div>
-                <h3>{{ p.name }}</h3>
+                <h3>{% if p.page %}<a href="{% url p.page %}">{{ p.name }}</a>{% else %}{{ p.name }}{% endif %}</h3>
                 <p>{{ p.use }}</p>
             </article>
             {% endfor %}
@@ -235,6 +235,7 @@
 
 {% include 'landing/consent.html' %}
 <script src="{% static 'landing/js/main.js' %}"></script>
+<script src="{% static 'landing/js/phone.js' %}"></script>
 <script src="{% static 'landing/js/traffic.js' %}" data-endpoint="{% url 'landing:events' %}"></script>
 </body>
 </html>

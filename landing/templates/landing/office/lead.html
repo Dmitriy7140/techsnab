@@ -3,7 +3,7 @@
 {% block content %}<a class="back" href="{% url 'landing:crm_leads' %}">← Все заявки</a>
 <div class="heading"><h1>Заявка №{{ lead.pk }}</h1><span class="muted">{{ lead.created_at|date:"d.m.Y H:i" }}</span></div>
 <div class="detail-grid"><section class="panel"><h2>Данные клиента</h2>
-<dl><dt>Имя</dt><dd>{{ lead.name }}</dd><dt>Телефон</dt><dd><a href="tel:{{ lead.phone }}">{{ lead.phone }}</a></dd>
+<dl><dt>Имя</dt><dd>{{ lead.name }}</dd><dt>Телефон</dt><dd><a href="tel:{{ lead.phone|cut:' ' }}">{{ lead.phone }}</a></dd>
 <dt>Продукция</dt><dd>{{ lead.cargo|default:"—" }}</dd><dt>Сообщение клиента</dt><dd class="verbatim">{{ lead.comment|default:"—" }}</dd></dl>
 {% if lead.visitor and perms.landing.view_trafficevent %}<a href="{% url 'landing:crm' %}?visitor={{ lead.visitor }}#history">История посетителя →</a>{% endif %}
 </section><section class="panel"><h2>Работа с заявкой</h2>

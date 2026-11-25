@@ -21,7 +21,6 @@
                 {% for message in messages %}{% if 'review' in message.tags %}<p role="status" class="alert alert--success">{{ message }}</p>{% endif %}{% endfor %}
                 {% csrf_token %}<input type="hidden" name="form_kind" value="review">
                 {% include 'landing/review_fields.html' %}
-                <p class="review-hint">Отзыв появится после одобрения модератором.</p>
                 <button class="btn btn--primary" type="submit">Отправить отзыв</button>
             </form>
         </div>
