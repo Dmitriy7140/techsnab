@@ -7,8 +7,7 @@
     <meta name="color-scheme" content="light">
     <link rel="icon" type="image/svg+xml" href="{% static 'landing/img/favicon.svg' %}">
     <link rel="apple-touch-icon" href="{% static 'landing/img/favicon.svg' %}">
-    <title>{{ site.company }} — поставка химической продукции по России</title>
-    <meta name="description" content="{{ site.company }} — поставка химической продукции: сода каустическая, перекись водорода, кислоты, удобрения и реагенты. Прямые поставки, собственный транспорт, доставка по всей России.">
+    {% include 'landing/seo_head.html' %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -59,9 +58,9 @@
     <div class="hero__bg"></div>
     <div class="container hero__inner">
         <div class="hero__content">
-            <span class="badge"><svg class="icon"><use href="#icon-shield"/></svg> Собственный парк • прямые поставки • доставка по РФ</span>
-            <h1>Поставка <span>химической продукции</span> по всей России</h1>
-            <p class="hero__lead">Сода каустическая, перекись водорода, кислоты, удобрения и реагенты — поставляем со склада и везём в специализированном транспорте с полным пакетом документов.</p>
+            <span class="badge"><svg class="icon"><use href="#icon-shield"/></svg> Собственный парк · прямые поставки</span>
+            <h1>Поставка <span>химической продукции</span> из Иваново</h1>
+            <p class="hero__lead">Поставляем каустическую соду, перекись водорода, кислоты и реагенты. Доставляем по Ивановской области, в соседние регионы и Москву.</p>
             <div class="hero__cta">
                 <a href="#contact" class="btn btn--primary btn--lg">Получить расчёт стоимости</a>
                 <a href="tel:{{ site.phone_href }}" class="btn btn--ghost btn--lg">
@@ -75,6 +74,7 @@
             </ul>
         </div>
         <aside class="hero__form">
+            {% include 'landing/truck.html' %}
             <h3>Заявка на поставку</h3>
             <p>Свяжемся с вами и зафиксируем цену и наличие</p>
             <a href="#contact" class="btn btn--primary btn--block">Оставить заявку</a>
@@ -101,7 +101,7 @@
         <div class="section__head">
             <span class="eyebrow">Каталог</span>
             <h2>Продукция</h2>
-            <p>Поставляем химическое сырьё, реагенты и удобрения напрямую, с доставкой по всей России. Отгрузка наливом и в таре, любые объёмы.</p>
+            <p>Химическое сырьё, реагенты и удобрения со склада в Иваново. Отгружаем наливом и в таре, согласуем объём и срок доставки.</p>
         </div>
         <div class="cards cards--3">
             {% for p in products %}
@@ -180,6 +180,8 @@
             {% endif %}
             <form class="form" method="post" action="{% url 'landing:index' %}#contact" novalidate>
                 {% csrf_token %}
+                {{ form.submission_id }}
+                {{ form.submission_id.errors }}
                 <div class="form__row">
                     <label class="field">
                         <span>Имя *</span>
@@ -199,6 +201,7 @@
                 <label class="field">
                     <span>Комментарий</span>
                     {{ form.comment }}
+                    {{ form.comment.errors }}
                 </label>
                 <button type="submit" class="btn btn--primary btn--block btn--lg">Отправить заявку</button>
                 <p class="form__policy">Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</p>
@@ -215,7 +218,7 @@
                 <img class="logo__img" src="{% static 'landing/img/logo.png' %}" alt="{{ site.company }}" width="63" height="44">
                 <span class="logo__text">{{ site.company }}</span>
             </a>
-            <p>{{ site.tagline }} по всей России. Собственный парк, документы под ключ, прямые поставки.</p>
+            <p>{{ site.tagline }} из Иваново. Собственный парк, договор и сопроводительные документы.</p>
         </div>
         <div class="footer__col">
             <h4>Разделы</h4>
@@ -235,12 +238,13 @@
     </div>
     <div class="container footer__bottom">
         <span>© {{ site.company_full }}. Все права защищены.</span>
-        <span>Перевозка химических грузов по России.</span>
+        <span>Ивановская область, соседние регионы и Москва.</span>
     </div>
 </footer>
 
 <a href="#contact" class="fab" aria-label="Оставить заявку"><svg class="icon"><use href="#icon-phone"/></svg></a>
 
 <script src="{% static 'landing/js/main.js' %}"></script>
+<script src="{% static 'landing/js/traffic.js' %}" data-endpoint="{% url 'landing:events' %}"></script>
 </body>
 </html>

@@ -1,0 +1,27 @@
+{% load static %}
+<title>Промышленная химия в Иваново с доставкой | Техснаб-Холдинг</title>
+<meta name="description" content="Техснаб-Холдинг поставляет каустическую соду, перекись водорода, кислоты и реагенты из Иваново. Доставка наливом и в таре по Ивановской области, в соседние регионы и Москву.">
+<link rel="canonical" href="{{ site.url }}/">
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "{{ site.url }}/#company",
+    "name": "{{ site.company|escapejs }}",
+    "legalName": "{{ site.company_full|escapejs }}",
+    "url": "{{ site.url }}/",
+    "logo": "{{ site.url }}{% static 'landing/img/logo.png' %}",
+    "telephone": "{{ site.phone_href|escapejs }}",
+    "email": "{{ site.email|escapejs }}",
+    "description": "Поставка промышленной химии и реагентов из Иваново наливом и в таре.",
+    "address": {
+        "@type": "PostalAddress",
+        "postalCode": "153000",
+        "streetAddress": "ул. Зелёная, д. 18",
+        "addressLocality": "Иваново",
+        "addressRegion": "Ивановская область",
+        "addressCountry": "RU"
+    },
+    "areaServed": ["Иваново", "Ивановская область", "Москва"]
+}
+</script>
