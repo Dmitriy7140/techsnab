@@ -1,7 +1,8 @@
 import json
 import re
-from datetime import datetime
+from datetime import UTC, date, datetime
 from importlib import import_module
+from unittest.mock import patch
 from uuid import uuid4
 from xml.etree import ElementTree
 from zoneinfo import ZoneInfo
@@ -160,16 +161,19 @@ class ReviewTests(TestCase):
 
     def test_unlimited_submissions_and_manual_publication(self):
         guest = Client()
-        data = {'form_kind': 'review', 'review-name': 'Гость', 'review-rating': 4, 'review-review_date': '29.02.2024',
+        data = {'form_kind': 'review', 'review-name': 'Гость', 'review-rating': 4,
                 'review-comment': 'Получили документы', 'review-submission_id': str(uuid4())}
-        self.assertContains(guest.get('/'), 'Оставить отзыв')
-        self.assertContains(guest.post('/', {**data, 'review-review_date': '2024-02-29'}), 'Введите дату')
-        self.assertContains(guest.post('/', {**data, 'review-review_date': '31.02.2024'}), 'Введите дату')
+        page = guest.get('/')
+        self.assertContains(page, 'Оставить отзыв')
+        self.assertNotContains(page, 'name="review-review_date"')
         self.assertEqual(guest.post('/', {**data, 'review-rating': 6}).status_code, 200)
         self.assertFalse(Review.objects.exists())
-        for _ in range(2):
-            self.assertRedirects(guest.post('/', data), '/#reviews', fetch_redirect_response=False)
+        with patch('landing.views.timezone.now', return_value=datetime(2024, 2, 28, 22, 30, tzinfo=UTC)):
+            for _ in range(2):
+                response = guest.post('/', {**data, 'review-review_date': '31.12.2099', 'status': 'approved'})
+                self.assertRedirects(response, '/#reviews', fetch_redirect_response=False)
         first = Review.objects.get()
+        self.assertEqual((first.review_date, first.status), (date(2024, 2, 29), Review.Status.PENDING))
         second = {**data, 'review-submission_id': str(uuid4()), 'review-comment': 'Вторая отправка'}
         guest.post('/', second)
         self.assertEqual(Review.objects.count(), 2)
@@ -194,6 +198,38 @@ class ReviewTests(TestCase):
         self.assertEqual((first.status, first.moderated_by), ('approved', 'Nick'))
         self.client.post(moderate, {'status': 'rejected', 'revision': 1})
         self.assertNotContains(guest.get('/'), data['review-comment'])
+
+    def test_manager_can_publish_once_with_a_chosen_date(self):
+        url = reverse('landing:create_review')
+        guest = Client()
+        self.assertIn('/crm/login/', guest.get(url).url)
+        staff = get_user_model().objects.create_user('Nick', is_staff=True)
+        grant(staff, 'reviews', 'view_review', 'change_review')
+        self.client.force_login(staff)
+        self.assertNotContains(self.client.get('/crm/reviews/'), 'Написать отзыв')
+        self.assertEqual(self.client.post(url, {}).status_code, 403)
+        grant(staff, 'reviews', 'add_review')
+        self.assertContains(self.client.get('/crm/reviews/'), url)
+        form = self.client.get(url).context['review_form']
+        data = {'review-submission_id': str(form['submission_id'].value()), 'review-name': 'Автор',
+                'review-rating': '5', 'review-comment': 'Текст из кабинета', 'review-review_date': '31.12.2099'}
+        self.assertContains(self.client.post(url, {**data, 'review-review_date': '31.02.2024'}), 'Введите дату')
+        self.assertEqual(Review.objects.count(), 0)
+        for _ in range(2):
+            self.assertEqual(self.client.post(url, data).status_code, 302)
+        review = Review.objects.get()
+        self.assertEqual((review.status, review.moderated_by, review.review_date),
+                         (Review.Status.APPROVED, 'Nick', date(2099, 12, 31)))
+        self.assertEqual(review.moderated_at, review.submitted_at)
+        self.assertContains(guest.get('/'), 'Текст из кабинета')
+        self.assertContains(guest.get('/'), '<time datetime="2099-12-31">31.12.2099</time>', html=True)
+        self.client.post(reverse('landing:moderate', args=[review.pk]), {'status': 'rejected', 'revision': 0})
+        self.client.post(url, data)
+        self.assertNotContains(guest.get('/'), 'Текст из кабинета')
+        pending = {'form_kind': 'review', **data, 'review-submission_id': str(uuid4()), 'review-comment': 'От гостя'}
+        guest.post('/', pending)
+        self.client.post(url, pending)
+        self.assertEqual(Review.objects.get(submission_id=pending['review-submission_id']).status, Review.Status.PENDING)
 
     @override_settings(PUBLIC_REVIEWS=False)
     def test_review_submissions_are_staging_only(self):

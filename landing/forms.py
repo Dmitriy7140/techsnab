@@ -1,10 +1,13 @@
 import re
+from uuid import uuid4
 
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 from .models import Lead
+from .reviews.models import Review
 
 
 class RussianDateField(forms.DateField):
@@ -21,11 +24,23 @@ class RussianDateField(forms.DateField):
 
 
 class ReviewForm(forms.Form):
-    submission_id = forms.UUIDField(required=False, widget=forms.HiddenInput)
+    submission_id = forms.UUIDField(required=False, initial=uuid4, widget=forms.HiddenInput)
     name = forms.CharField(label='Имя', max_length=120, widget=forms.TextInput(attrs={'autocomplete': 'name'}))
     rating = forms.TypedChoiceField(label='Оценка', coerce=int, choices=[(n, str(n)) for n in range(1, 6)])
-    review_date = RussianDateField(label='Дата отзыва')
     comment = forms.CharField(label='Комментарий', max_length=10000, widget=forms.Textarea(attrs={'rows': 4}))
+
+    def save(self, *, submitted_at, review_date, **moderation):
+        data = self.cleaned_data
+        return Review.objects.get_or_create(
+            submission_id=data['submission_id'] or uuid4(),
+            defaults={'name': data['name'], 'rating': data['rating'], 'comment': data['comment'],
+                      'submitted_at': submitted_at, 'review_date': review_date, **moderation},
+        )
+
+
+class ManagerReviewForm(ReviewForm):
+    submission_id = forms.UUIDField(initial=uuid4, widget=forms.HiddenInput)
+    review_date = RussianDateField(label='Дата отзыва', initial=timezone.localdate)
 
 
 class LeadUpdateForm(forms.ModelForm):

@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="light">
-    <link rel="icon" type="image/svg+xml" href="{% static 'landing/img/favicon.svg' %}">
-    <link rel="apple-touch-icon" href="{% static 'landing/img/favicon.svg' %}">
+    {% include 'landing/icons.html' %}
     {% include 'landing/seo_head.html' %}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -221,10 +220,6 @@
                 <span class="logo__text">{{ site.company }}</span>
             </a>
             <p>{{ site.tagline }} из Иваново. Собственный парк, договор и сопроводительные документы.</p>
-            <details class="photo-credit">
-                <summary>Об изображении</summary>
-                <p>Lav Ulv · <cite><a href="https://commons.wikimedia.org/?curid=78303301">AW73486 (17.09.21, Marselis Boulevard, Stadion Allé)DSC_7372_Balancer</a></cite> · <a href="https://creativecommons.org/licenses/by/2.0/" rel="license">CC BY 2.0</a>. Цвет кабины и цистерны изменён.</p>
-            </details>
         </div>
         <div class="footer__col">
             <h4>Разделы</h4>

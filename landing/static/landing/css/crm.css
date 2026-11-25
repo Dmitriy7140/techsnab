@@ -45,6 +45,8 @@ button { padding: .55rem .95rem; background: #fff; color: var(--accent); border:
 button:hover { background: var(--tint); }
 button.primary { color: #fff; background: var(--accent); }
 button.primary:hover { background: #004451; }
+.button-link { display: inline-block; padding: .55rem .95rem; border: 1px solid var(--accent); border-radius: 2px; background: var(--accent); color: #fff; font-weight: 600; text-decoration: none; }
+.button-link:hover { color: #fff; background: #004451; }
 button.quiet { border-color: var(--line); padding: .35rem .65rem; }
 .inline label { color: var(--muted); }
 .inline input { width: 8.6rem; }

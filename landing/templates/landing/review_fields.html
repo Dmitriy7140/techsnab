@@ -1,0 +1,27 @@
+{{ review_form.non_field_errors }}
+{{ review_form.submission_id }}{{ review_form.submission_id.errors }}
+<div class="review-fields{% if review_form.review_date %} review-fields--dated{% endif %}">
+    <div class="review-field">
+        <label for="{{ review_form.name.id_for_label }}">Имя</label>
+        {{ review_form.name }}{{ review_form.name.errors }}
+    </div>
+    {% if review_form.review_date %}
+    <div class="review-field">
+        <label for="{{ review_form.review_date.id_for_label }}">Дата отзыва</label>
+        {{ review_form.review_date }}{{ review_form.review_date.errors }}
+    </div>
+    {% endif %}
+    <div class="review-field review-rating">
+        <span id="{{ review_form.rating.auto_id }}-label">Оценка</span>
+        <div class="star-picker" role="radiogroup" aria-labelledby="{{ review_form.rating.auto_id }}-label" aria-required="true">
+            {% for n in '12345' %}
+            <label><input type="radio" name="{{ review_form.rating.html_name }}" value="{{ n }}" required {% if review_form.rating.value|stringformat:"s" == n %}checked{% endif %}><span aria-hidden="true">★</span><span class="sr-only">{{ n }} из 5</span></label>
+            {% endfor %}
+        </div>
+        {{ review_form.rating.errors }}
+    </div>
+</div>
+<div class="review-field">
+    <label for="{{ review_form.comment.id_for_label }}">Комментарий</label>
+    {{ review_form.comment }}{{ review_form.comment.errors }}
+</div>
