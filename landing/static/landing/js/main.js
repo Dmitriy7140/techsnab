@@ -1,16 +1,25 @@
-// Мобильное меню + закрытие по клику на ссылку.
 (function () {
-    var header = document.querySelector('.header');
-    var burger = document.getElementById('burger');
-    if (!header || !burger) return;
+    const header = document.querySelector('.header');
+    const burger = document.getElementById('burger');
+    const nav = document.getElementById('nav');
+
+    function setOpen(open) {
+        header.classList.toggle('open', open);
+        burger.setAttribute('aria-expanded', String(open));
+    }
 
     burger.addEventListener('click', function () {
-        header.classList.toggle('open');
+        setOpen(burger.getAttribute('aria-expanded') !== 'true');
     });
 
-    document.querySelectorAll('#nav a').forEach(function (link) {
-        link.addEventListener('click', function () {
-            header.classList.remove('open');
-        });
+    nav.addEventListener('click', function (event) {
+        if (event.target.closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', function (event) {
+        if (event.key === 'Escape' && header.classList.contains('open')) {
+            setOpen(false);
+            burger.focus();
+        }
     });
 })();

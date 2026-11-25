@@ -1,17 +1,15 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang="ru" style="color-scheme: light;">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="light">
+    <meta name="color-scheme" content="only light">
+    <meta name="theme-color" content="#ffffff">
     <link rel="icon" type="image/svg+xml" href="{% static 'landing/img/favicon.svg' %}">
     <link rel="apple-touch-icon" href="{% static 'landing/img/favicon.svg' %}">
     <title>{{ site.company }} — поставка химической продукции по России</title>
     <meta name="description" content="{{ site.company }} — поставка химической продукции: сода каустическая, перекись водорода, кислоты, удобрения и реагенты. Прямые поставки, собственный транспорт, доставка по всей России.">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
 </head>
 <body>
@@ -38,7 +36,7 @@
             <img class="logo__img" src="{% static 'landing/img/logo.png' %}" alt="{{ site.company }}" width="63" height="44">
             <span class="logo__text">{{ site.company }}</span>
         </a>
-        <nav class="nav" id="nav">
+        <nav class="nav" id="nav" aria-label="Основная навигация">
             <a href="#products">Продукция</a>
             <a href="#how">Как работаем</a>
             <a href="#why">Преимущества</a>
@@ -48,38 +46,30 @@
             <a href="tel:{{ site.phone_href }}" class="header__phone">
                 <svg class="icon"><use href="#icon-phone"/></svg>{{ site.phone }}
             </a>
-            <a href="#contact" class="btn btn--primary btn--sm">Рассчитать стоимость</a>
+            <a href="#contact" class="btn btn--primary btn--sm"><span class="header__cta-long">Рассчитать стоимость</span><span class="header__cta-short">Заявка</span></a>
         </div>
-        <button class="burger" id="burger" aria-label="Меню"><span></span><span></span><span></span></button>
+        <button class="burger" id="burger" type="button" aria-label="Меню" aria-controls="nav" aria-expanded="false"><span></span><span></span><span></span></button>
     </div>
 </header>
 
-{# ---- Hero ---- #}
+<main>
 <section class="hero">
-    <div class="hero__bg"></div>
     <div class="container hero__inner">
         <div class="hero__content">
-            <span class="badge"><svg class="icon"><use href="#icon-shield"/></svg> Собственный парк • прямые поставки • доставка по РФ</span>
-            <h1>Поставка <span>химической продукции</span> по всей России</h1>
+            <p class="hero__kicker">Прямые поставки со склада</p>
+            <h1>Поставка <span class="hero__product">химической продукции</span> по&nbsp;всей&nbsp;России</h1>
             <p class="hero__lead">Сода каустическая, перекись водорода, кислоты, удобрения и реагенты — поставляем со склада и везём в специализированном транспорте с полным пакетом документов.</p>
             <div class="hero__cta">
-                <a href="#contact" class="btn btn--primary btn--lg">Получить расчёт стоимости</a>
-                <a href="tel:{{ site.phone_href }}" class="btn btn--ghost btn--lg">
+                <a href="#contact" class="btn btn--primary">Рассчитать стоимость <span aria-hidden="true">→</span></a>
+                <a href="tel:{{ site.phone_href }}" class="btn btn--ghost">
                     <svg class="icon"><use href="#icon-phone"/></svg>{{ site.phone }}
                 </a>
             </div>
-            <ul class="hero__points">
-                <li><svg class="icon"><use href="#icon-shield"/></svg> Отгрузка наливом и в таре</li>
-                <li><svg class="icon"><use href="#icon-truck"/></svg> Собственный парк цистерн</li>
-                <li><svg class="icon"><use href="#icon-flask"/></svg> Каустик, перекись, кислоты, удобрения</li>
-            </ul>
         </div>
-        <aside class="hero__form">
-            <h3>Заявка на поставку</h3>
-            <p>Свяжемся с вами и зафиксируем цену и наличие</p>
-            <a href="#contact" class="btn btn--primary btn--block">Оставить заявку</a>
-            <div class="hero__form-note"><svg class="icon"><use href="#icon-shield"/></svg> Работаем с НДС и без. Договор и закрывающие документы.</div>
-        </aside>
+        <figure class="hero__figure">
+            <img src="{% static 'landing/img/tanker.webp' %}" alt="Промышленная автоцистерна у склада" width="1120" height="840" fetchpriority="high">
+            <figcaption><svg class="icon" aria-hidden="true"><use href="#icon-truck"/></svg> Отгрузка наливом и в таре</figcaption>
+        </figure>
     </div>
 </section>
 
@@ -99,18 +89,17 @@
 <section class="section" id="products">
     <div class="container">
         <div class="section__head">
-            <span class="eyebrow">Каталог</span>
-            <h2>Продукция</h2>
+            <h2>Каталог продукции</h2>
             <p>Поставляем химическое сырьё, реагенты и удобрения напрямую, с доставкой по всей России. Отгрузка наливом и в таре, любые объёмы.</p>
         </div>
-        <div class="cards cards--3">
+        <div class="cards">
             {% for p in products %}
             <article class="card card--product">
-                <span class="card__icon"><svg class="icon"><use href="#icon-{{ p.icon }}"/></svg></span>
-                <div class="card__title">
-                    <h3>{{ p.name }}</h3>
+                <div class="card__meta">
+                    <svg class="card__icon icon" aria-hidden="true"><use href="#icon-{{ p.icon }}"/></svg>
                     {% if p.formula %}<span class="formula">{{ p.formula }}</span>{% endif %}
                 </div>
+                <h3>{{ p.name }}</h3>
                 <p>{{ p.use }}</p>
             </article>
             {% endfor %}
@@ -123,14 +112,13 @@
 <section class="section section--alt" id="how">
     <div class="container">
         <div class="section__head">
-            <span class="eyebrow">Процесс</span>
             <h2>Как мы работаем</h2>
             <p>Прозрачная схема от заявки до доставки — без скрытых платежей и сюрпризов.</p>
         </div>
         <ol class="steps">
             {% for title, text in steps %}
             <li class="step">
-                <span class="step__num">{{ forloop.counter }}</span>
+                <span class="step__num" aria-hidden="true">{{ forloop.counter|stringformat:"02d" }}</span>
                 <h3>{{ title }}</h3>
                 <p>{{ text }}</p>
             </li>
@@ -143,13 +131,12 @@
 <section class="section" id="why">
     <div class="container">
         <div class="section__head">
-            <span class="eyebrow">Почему мы</span>
             <h2>Перевозим химию безопасно</h2>
         </div>
-        <div class="cards cards--3">
+        <div class="cards">
             {% for title, text in advantages %}
             <article class="card card--feature">
-                <span class="card__icon card__icon--soft"><svg class="icon"><use href="#icon-shield"/></svg></span>
+                <svg class="card__icon icon" aria-hidden="true"><use href="#icon-shield"/></svg>
                 <h3>{{ title }}</h3>
                 <p>{{ text }}</p>
             </article>
@@ -162,7 +149,7 @@
 <section class="section contact" id="contact">
     <div class="container contact__inner">
         <div class="contact__info">
-            <span class="eyebrow">Контакты</span>
+            <span class="hero__kicker">Контакты</span>
             <h2>Рассчитаем стоимость поставки</h2>
             <p>Оставьте заявку — менеджер свяжется с вами, уточнит детали и зафиксирует цену.</p>
             <ul class="contact__list">
@@ -171,11 +158,13 @@
                 <li><svg class="icon"><use href="#icon-drop"/></svg><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
                 <li><svg class="icon"><use href="#icon-map"/></svg>{{ site.address }}</li>
             </ul>
+            <p class="contact__terms">Работаем с НДС и без. Предоставляем договор и закрывающие документы.</p>
         </div>
         <div class="contact__form-wrap">
+            <h3>Заявка на поставку</h3>
             {% if messages %}
                 {% for message in messages %}
-                <div class="alert alert--{{ message.tags }}">{{ message }}</div>
+                <div class="alert alert--{{ message.tags }}" role="status">{{ message }}</div>
                 {% endfor %}
             {% endif %}
             <form class="form" method="post" action="{% url 'landing:index' %}#contact" novalidate>
@@ -195,23 +184,25 @@
                 <label class="field">
                     <span>Что везём</span>
                     {{ form.cargo }}
+                    {% if form.cargo.errors %}<em class="field__err">{{ form.cargo.errors.0 }}</em>{% endif %}
                 </label>
                 <label class="field">
                     <span>Комментарий</span>
                     {{ form.comment }}
                 </label>
-                <button type="submit" class="btn btn--primary btn--block btn--lg">Отправить заявку</button>
+                <button type="submit" class="btn btn--primary btn--block">Отправить заявку</button>
                 <p class="form__policy">Нажимая кнопку, вы соглашаетесь на обработку персональных данных.</p>
             </form>
         </div>
     </div>
 </section>
+</main>
 
 {# ---- Подвал ---- #}
 <footer class="footer">
     <div class="container footer__inner">
         <div class="footer__brand">
-            <a href="#top" class="logo logo--light">
+            <a href="#top" class="logo">
                 <img class="logo__img" src="{% static 'landing/img/logo.png' %}" alt="{{ site.company }}" width="63" height="44">
                 <span class="logo__text">{{ site.company }}</span>
             </a>
@@ -238,8 +229,6 @@
         <span>Перевозка химических грузов по России.</span>
     </div>
 </footer>
-
-<a href="#contact" class="fab" aria-label="Оставить заявку"><svg class="icon"><use href="#icon-phone"/></svg></a>
 
 <script src="{% static 'landing/js/main.js' %}"></script>
 </body>
