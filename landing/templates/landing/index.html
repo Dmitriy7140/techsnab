@@ -12,6 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/feedback.css' %}">
 </head>
 <body>
 
@@ -158,6 +159,7 @@
     </div>
 </section>
 
+{% if review_form %}{% include 'landing/reviews.html' %}{% endif %}
 {# ---- Форма заявки / контакты ---- #}
 <section class="section contact" id="contact">
     <div class="container contact__inner">
@@ -175,7 +177,7 @@
         <div class="contact__form-wrap">
             {% if messages %}
                 {% for message in messages %}
-                <div class="alert alert--{{ message.tags }}">{{ message }}</div>
+                {% if 'review' not in message.tags %}<div class="alert alert--{{ message.tags }}">{{ message }}</div>{% endif %}
                 {% endfor %}
             {% endif %}
             <form class="form" method="post" action="{% url 'landing:index' %}#contact" novalidate>
@@ -237,6 +239,7 @@
         </div>
     </div>
     <div class="container footer__bottom">
+        <a class="cookie-settings" href="?cookies=1#cookie-choice">Настройки cookie</a>
         <span>© {{ site.company_full }}. Все права защищены.</span>
         <span>Ивановская область, соседние регионы и Москва.</span>
     </div>
@@ -244,6 +247,7 @@
 
 <a href="#contact" class="fab" aria-label="Оставить заявку"><svg class="icon"><use href="#icon-phone"/></svg></a>
 
+{% include 'landing/consent.html' %}
 <script src="{% static 'landing/js/main.js' %}"></script>
 <script src="{% static 'landing/js/traffic.js' %}" data-endpoint="{% url 'landing:events' %}"></script>
 </body>

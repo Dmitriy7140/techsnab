@@ -17,6 +17,7 @@ class Lead(models.Model):
     comment = models.TextField('Сообщение клиента', blank=True)
     status = models.CharField('Статус', max_length=12, choices=Status.choices, default=Status.NEW, db_index=True)
     note = models.TextField('Заметка менеджера', blank=True)
+    revision = models.PositiveIntegerField(default=0)
 
     class Meta:
         ordering = ['-created_at', '-pk']
@@ -25,6 +26,11 @@ class Lead(models.Model):
 
     def __str__(self):
         return f'Заявка №{self.pk} · {self.name}'
+
+
+class FirstVisit(models.Model):
+    visitor = models.UUIDField(primary_key=True)
+    first_seen = models.DateTimeField(db_index=True, default=timezone.now)
 
 
 class TrafficEvent(models.Model):

@@ -1,0 +1,9 @@
+<aside class="cookie-panel" id="cookie-choice" aria-labelledby="cookie-title" data-state="{{ consent_state }}" {% if consent_state and not request.GET.cookies %}hidden{% endif %}>
+    <h2 id="cookie-title">Разрешить cookie для статистики?</h2>
+    <p>Они помогают считать уникальных посетителей и клики. Отправить заявку можно при любом выборе.</p>
+    <form action="{% url 'landing:consent' %}" method="post">{% csrf_token %}
+        <button name="choice" value="allow">Разрешить</button>
+        <button name="choice" value="deny">Отказаться</button>
+    </form>
+    <p class="cookie-error" role="alert" hidden>Не удалось сохранить выбор. Попробуйте ещё раз.</p>
+</aside>
