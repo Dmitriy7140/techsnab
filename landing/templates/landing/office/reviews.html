@@ -1,0 +1,14 @@
+{% extends 'landing/office/base.html' %}
+{% block title %}Модерация отзывов{% endblock %}
+{% block content %}<h1>Модерация отзывов</h1>
+<nav class="tabs" aria-label="Статусы отзывов">{% for key,label,n in tabs %}<a href="?status={{ key }}" {% if key == status %}aria-current="page"{% endif %}>{{ label }} <b>{{ n }}</b></a>{% endfor %}</nav>
+{% for item in page %}<article class="panel moderation-card">
+<div class="heading"><h2>{{ item.name }}</h2><span class="stars" aria-label="{{ item.rating }} из 5">{{ item.stars }}</span></div>
+<p class="muted">Дата отзыва {{ item.review_date|date:"d.m.Y" }} · Получен {{ item.submitted_at|date:"d.m.Y H:i" }}</p>
+<p class="verbatim review-text">{{ item.comment }}</p>
+{% if item.moderated_at %}<p class="muted">{{ item.get_status_display }} · {{ item.moderated_by }} · {{ item.moderated_at|date:"d.m.Y H:i" }}</p>{% endif %}
+{% if perms.reviews.change_review %}<form class="actions" action="{% url 'landing:moderate' item.pk %}" method="post">{% csrf_token %}<input type="hidden" name="revision" value="{{ item.revision }}">
+{% if item.status != 'approved' %}<button class="primary" name="status" value="approved">Одобрить и опубликовать</button>{% endif %}
+{% if item.status != 'rejected' %}<button name="status" value="rejected">{% if item.status == 'approved' %}Снять с публикации{% else %}Отклонить{% endif %}</button>{% endif %}</form>{% endif %}
+</article>{% empty %}<p class="empty">В этом разделе отзывов пока нет.</p>{% endfor %}
+{% include 'landing/office/pager.html' %}{% endblock %}

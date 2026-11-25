@@ -1,0 +1,7 @@
+{% extends 'landing/office/base.html' %}
+{% block title %}Входящие заявки{% endblock %}
+{% block content %}<h1>Входящие заявки</h1>
+<form class="filters" method="get"><label>Поиск<input type="search" name="q" value="{{ q }}" placeholder="Имя, телефон, продукция"></label>
+<label>Статус<select name="status"><option value="">Все статусы</option>{% for key,label in statuses %}<option value="{{ key }}" {% if key == status %}selected{% endif %}>{{ label }}</option>{% endfor %}</select></label>
+<button>Показать</button>{% if q or status %}<a href="{% url 'landing:crm_leads' %}">Сбросить</a>{% endif %}</form>
+{% include 'landing/office/lead_table.html' %}{% include 'landing/office/pager.html' %}{% endblock %}

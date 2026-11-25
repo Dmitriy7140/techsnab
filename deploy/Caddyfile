@@ -9,7 +9,8 @@ admin.th37.ru {
 	header X-Robots-Tag "noindex, nofollow"
 	encode zstd gzip
 	redir / /crm/ 302
-	@office path /crm/ /admin/* /static/*
+	redir /crm /crm/ 302
+	@office path /crm/* /admin/* /static/*
 	handle @office {
 		reverse_proxy production:8000
 	}
@@ -23,6 +24,8 @@ staging.th37.ru {
 	basic_auth {
 		import /etc/caddy/staging-users
 	}
+	@office path /crm /crm/* /admin /admin/*
+	respond @office 404
 	encode zstd gzip
 	reverse_proxy staging:8000
 }

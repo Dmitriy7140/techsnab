@@ -10,6 +10,7 @@
     <link rel="apple-touch-icon" href="{% static 'landing/img/favicon.svg' %}">
     {% include 'landing/seo_head.html' %}
     <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/feedback.css' %}">
 </head>
 <body>
 
@@ -39,6 +40,7 @@
             <a href="#products">Продукция</a>
             <a href="#how">Как работаем</a>
             <a href="#why">Преимущества</a>
+            {% if review_form %}<a href="#reviews">Отзывы</a>{% endif %}
             <a href="#contact">Контакты</a>
         </nav>
         <div class="header__actions">
@@ -141,6 +143,7 @@
     </div>
 </section>
 
+{% if review_form %}{% include 'landing/reviews.html' %}{% endif %}
 {# ---- Форма заявки / контакты ---- #}
 <section class="section contact" id="contact">
     <div class="container contact__inner">
@@ -160,7 +163,7 @@
             <h3>Заявка на поставку</h3>
             {% if messages %}
                 {% for message in messages %}
-                <div class="alert alert--{{ message.tags }}" role="status">{{ message }}</div>
+                {% if 'review' not in message.tags %}<div class="alert alert--{{ message.tags }}" role="status">{{ message }}</div>{% endif %}
                 {% endfor %}
             {% endif %}
             <form class="form" method="post" action="{% url 'landing:index' %}#contact" novalidate>
@@ -212,6 +215,7 @@
             <a href="#products">Продукция</a>
             <a href="#how">Как работаем</a>
             <a href="#why">Преимущества</a>
+            {% if review_form %}<a href="#reviews">Отзывы</a>{% endif %}
         </div>
         <div class="footer__col">
             <h4>Контакты</h4>
@@ -224,11 +228,13 @@
         </div>
     </div>
     <div class="container footer__bottom">
+        <a class="cookie-settings" href="?cookies=1#cookie-choice">Настройки cookie</a>
         <span>© {{ site.company_full }}. Все права защищены.</span>
         <span>Ивановская область, соседние регионы и Москва.</span>
     </div>
 </footer>
 
+{% include 'landing/consent.html' %}
 <script src="{% static 'landing/js/main.js' %}"></script>
 <script src="{% static 'landing/js/traffic.js' %}" data-endpoint="{% url 'landing:events' %}"></script>
 </body>

@@ -13,9 +13,9 @@ COPY settings.py config/deployment.py
 RUN python manage.py collectstatic --noinput \
     && groupadd --gid 10001 techsnab \
     && useradd --uid 10001 --gid 10001 --no-create-home techsnab \
-    && install -d -o techsnab -g techsnab /var/lib/techsnab
+    && install -d -o techsnab -g techsnab /var/lib/techsnab /var/lib/techsnab-reviews
 
 ENV DJANGO_SETTINGS_MODULE=config.deployment
 USER techsnab
 EXPOSE 8000
-CMD ["sh", "-ec", "python manage.py migrate --noinput && exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --threads 2"]
+CMD ["sh", "-ec", "python manage.py migrate --noinput; if [ \"${MIGRATE_REVIEWS:-0}\" = 1 ]; then python manage.py migrate reviews --database reviews --noinput; fi; exec gunicorn config.wsgi:application --bind 0.0.0.0:8000 --workers 2 --threads 2"]

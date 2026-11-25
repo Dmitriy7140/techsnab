@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'landing',
+    'landing.reviews',
 ]
 
 MIDDLEWARE = [
@@ -95,9 +96,16 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-    }
+        'OPTIONS': {'timeout': 15, 'transaction_mode': 'IMMEDIATE'},
+    },
+    'reviews': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'reviews.sqlite3',
+        'OPTIONS': {'timeout': 15, 'transaction_mode': 'IMMEDIATE'},
+    },
 }
-
+DATABASE_ROUTERS = ['landing.reviews.router.ReviewRouter']
+PUBLIC_REVIEWS = os.environ.get('PUBLIC_REVIEWS') == '1'
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators

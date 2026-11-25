@@ -2,12 +2,15 @@ from uuid import uuid4
 
 from django.conf import settings
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
+from django.core.paginator import Paginator
+from django.utils import timezone
 from django.shortcuts import redirect, render
 
-from .forms import RequestForm
+from .forms import RequestForm, ReviewForm
 from .models import Lead
-from .traffic import visitor_id
+from .reviews.models import Review
+from .traffic import consent_state, visitor_id
 
 # Каталог продукции — наименование, формула/маркировка, применение.
 PRODUCTS = [
@@ -85,22 +88,37 @@ STATS = [
 
 
 def index(request):
-    visitor = visitor_id(request)
-    if request.method == 'POST':
+    is_review = request.method == 'POST' and request.POST.get('form_kind') == 'review'
+    if is_review and not settings.PUBLIC_REVIEWS:
+        raise Http404
+    form = RequestForm(initial={'submission_id': uuid4()})
+    review_form = None
+    published = None
+    if settings.PUBLIC_REVIEWS:
+        review_form = ReviewForm(request.POST if is_review else None, prefix='review',
+                                 initial={'submission_id': uuid4(), 'review_date': timezone.localdate()})
+        if is_review and review_form.is_valid():
+            data = review_form.cleaned_data
+            Review.objects.get_or_create(submission_id=data['submission_id'] or uuid4(), defaults={
+                name: data[name] for name in ('name', 'rating', 'comment', 'review_date')
+            })
+            messages.success(request, 'Спасибо! Отзыв отправлен на модерацию.', extra_tags='review')
+            return redirect(f'{request.path}#reviews')
+        approved = Review.objects.filter(status=Review.Status.APPROVED).order_by('-review_date', '-pk')
+        published = Paginator(approved, 6).get_page(request.GET.get('review_page'))
+    if request.method == 'POST' and not is_review:
         form = RequestForm(request.POST)
         if form.is_valid():
             data = form.cleaned_data
             Lead.objects.get_or_create(
                 submission_id=data.get('submission_id') or uuid4(),
-                defaults={**{key: data[key] for key in ('name', 'phone', 'cargo', 'comment')}, 'visitor': visitor},
+                defaults={**{key: data[key] for key in ('name', 'phone', 'cargo', 'comment')}, 'visitor': visitor_id(request)},
             )
             messages.success(
                 request,
                 'Спасибо! Заявка принята — мы свяжемся с вами в ближайшее время.',
             )
             return redirect(f"{request.path}#contact")
-    else:
-        form = RequestForm(initial={'submission_id': uuid4()})
 
     context = {
         'site': settings.SITE,
@@ -109,11 +127,11 @@ def index(request):
         'steps': STEPS,
         'advantages': ADVANTAGES,
         'stats': STATS,
+        'review_form': review_form,
+        'published': published,
+        'consent_state': consent_state(request),
     }
     response = render(request, 'landing/index.html', context)
-    if request.method == 'GET' and visitor is None:
-        response.set_signed_cookie('th37_visitor', str(uuid4()), salt='traffic', max_age=60*60*24*30,
-                                   secure=request.is_secure(), httponly=True, samesite='Lax')
     response.headers['Cache-Control'] = 'private, no-store'
     return response
 

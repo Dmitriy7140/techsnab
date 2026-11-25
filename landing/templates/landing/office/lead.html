@@ -1,0 +1,13 @@
+{% extends 'landing/office/base.html' %}
+{% block title %}Заявка №{{ lead.pk }}{% endblock %}
+{% block content %}<a class="back" href="{% url 'landing:crm_leads' %}">← Все заявки</a>
+<div class="heading"><h1>Заявка №{{ lead.pk }}</h1><span class="muted">{{ lead.created_at|date:"d.m.Y H:i" }}</span></div>
+<div class="detail-grid"><section class="panel"><h2>Данные клиента</h2>
+<dl><dt>Имя</dt><dd>{{ lead.name }}</dd><dt>Телефон</dt><dd><a href="tel:{{ lead.phone }}">{{ lead.phone }}</a></dd>
+<dt>Продукция</dt><dd>{{ lead.cargo|default:"—" }}</dd><dt>Сообщение клиента</dt><dd class="verbatim">{{ lead.comment|default:"—" }}</dd></dl>
+{% if lead.visitor and perms.landing.view_trafficevent %}<a href="{% url 'landing:crm' %}?visitor={{ lead.visitor }}#history">История посетителя →</a>{% endif %}
+</section><section class="panel"><h2>Работа с заявкой</h2>
+{% if perms.landing.change_lead %}<form method="post" class="stack">{% csrf_token %}{{ form.revision }}{{ form.revision.errors }}{{ form.non_field_errors }}
+<label>Статус{{ form.status }}{{ form.status.errors }}</label><label>Заметка менеджера{{ form.note }}{{ form.note.errors }}</label><button class="primary">Сохранить</button></form>
+{% else %}<p>{{ lead.get_status_display }}</p><p class="verbatim">{{ lead.note }}</p>{% endif %}
+</section></div>{% endblock %}

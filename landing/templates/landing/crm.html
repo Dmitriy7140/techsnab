@@ -1,55 +1,20 @@
-{% load static %}
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="color-scheme" content="only light"><meta name="robots" content="noindex,nofollow">
-    <title>Заявки и трафик · Техснаб</title>
-    <link rel="stylesheet" href="{% static 'landing/css/crm.css' %}">
-</head>
-<body>
-<header><div class="wrap top">
-    <strong>Техснаб · CRM</strong>
-    <nav><a href="#inbox">Заявки</a><a href="#traffic">Трафик</a>
-        <form action="{% url 'admin:logout' %}" method="post">{% csrf_token %}<button>Выйти</button></form>
-    </nav>
-</div></header>
-<main class="wrap">
-    <section id="inbox">
-        <div class="section-head"><h1>Входящие заявки</h1><a href="{% url 'admin:landing_lead_changelist' %}">Все заявки →</a></div>
-        <p class="sub">Новых заявок — {{ new_count }}</p>
-        {% if leads %}
-        <div class="table-wrap"><table><thead><tr><th>Получена</th><th>Клиент</th><th>Телефон</th><th>Продукция</th><th>Статус</th></tr></thead><tbody>
-        {% for lead in leads %}<tr><td>{{ lead.created_at|date:"d.m.Y H:i" }}</td><td><a href="{% url 'admin:landing_lead_change' lead.pk %}">{{ lead.name }}</a></td><td>{{ lead.phone }}</td><td>{{ lead.cargo|default:"—" }}</td><td>{{ lead.get_status_display }}</td></tr>{% endfor %}
-        </tbody></table></div>
-        {% else %}<p class="empty">Заявок пока нет. Отправленные на сайте заявки появятся здесь.</p>{% endif %}
-    </section>
-    <section id="traffic">
-        <div class="section-head"><h2>Трафик сайта</h2>
-            <form method="get" action="#traffic"><label>На дату <input type="date" name="date" value="{{ date }}" required></label>
-                <input type="hidden" name="period" value="{{ period }}"><button>Показать</button></form>
-        </div>
-        <p class="sub">Календарные периоды по московскому времени. Выберите период для журнала.</p>
-        <div class="metrics">{% for card in cards %}
-            <a class="metric" href="?date={{ date }}&amp;period={{ card.key }}#traffic" {% if card.key == period and not visitor %}aria-current="true"{% endif %}>
-                <h3>{{ card.label }}</h3><strong>{{ card.views }}</strong><span>Просмотры</span>
-                <small>Посетители {{ card.visitors }} · Клики {{ card.clicks }}</small>
-            </a>
-        {% endfor %}</div>
-        <div class="section-head"><h3>{% if visitor %}История посетителя за всё время{% else %}Журнал переходов и кликов{% endif %}</h3>
-            {% if visitor %}<a href="?date={{ date }}&amp;period={{ period }}#traffic">Все посетители</a>{% endif %}
-        </div>
-        {% if events %}
-        <div class="table-wrap"><table><thead><tr><th>Время</th><th>Посетитель</th><th>Событие</th><th>Элемент / источник</th><th>Куда</th></tr></thead><tbody>
-        {% for e in events %}<tr><td>{{ e.created_at|date:"d.m.Y H:i:s" }}</td>
-            <td><a href="?visitor={{ e.visitor }}&amp;date={{ date }}&amp;period={{ period }}#traffic">{{ e.visitor_label }}</a></td>
-            <td>{{ e.get_kind_display }}</td><td>{% if e.kind == 'view' %}{{ e.source|default:"Прямой переход" }}{% else %}{{ e.label|default:"Ссылка" }}<small>{{ e.placement }}</small>{% endif %}</td><td>{{ e.target }}</td></tr>{% endfor %}
-        </tbody></table></div>
-        <nav class="pages">{% if page.has_previous %}<a href="{% querystring page=page.previous_page_number %}#traffic">← Новее</a>{% endif %}
-            <span>{{ page.number }} / {{ page.paginator.num_pages }}</span>
-            {% if page.has_next %}<a href="{% querystring page=page.next_page_number %}#traffic">Раньше →</a>{% endif %}
-        </nav>
-        {% else %}<p class="empty">За выбранный период событий нет.</p>{% endif %}
-    </section>
-</main>
-</body></html>
+{% extends 'landing/office/base.html' %}
+{% block title %}Аналитика{% endblock %}
+{% block content %}<div class="heading"><h1>Аналитика сайта</h1>
+<form class="inline" method="get"><label>На дату <input type="text" name="date" value="{{ date }}" maxlength="10" required placeholder="дд.мм.гггг" pattern="[0-9]{2}\.[0-9]{2}\.[0-9]{4}"></label>
+<input type="hidden" name="period" value="{{ period }}"><button>Показать</button></form></div>
+<div class="metrics">{% for card in cards %}<a href="?date={{ date }}&amp;period={{ card.key }}" {% if card.key == period %}aria-current="page"{% endif %}>
+<b>{{ card.label }}</b><strong>{{ card.visitors }}</strong><span>Уникальные посетители</span><small>Клики {{ card.clicks }}</small></a>{% endfor %}</div>
+<section class="panel chart-card"><div class="heading"><h2>Новые уникальные посетители</h2><span class="muted">{% if period == 'day' %}По часам{% elif period == 'month' %}По дням{% else %}По месяцам{% endif %} · МСК</span></div>
+<div class="chart-layout"><div class="scale"><span>{{ maximum }}</span><span>0</span></div>
+<div class="chart" aria-label="График новых посетителей"><div class="bars">{% for bar in bars %}
+<div class="bar-cell" tabindex="0" {% if bar.count %}data-filled{% endif %} aria-label="{{ bar.description }} · {{ bar.count }}" data-tooltip="{{ bar.description }} · {{ bar.count }}">
+<span class="bar" style="height: {{ bar.height }}%"></span><span class="tick">{% if bar.tick %}{{ bar.label }}{% endif %}</span></div>{% endfor %}</div></div></div>
+<p class="muted small">Первое посещение с согласием на статистику. Повторные визиты с той же cookie не увеличивают график.</p></section>
+<section id="inbox"><div class="heading"><h2>Последние заявки <small>{{ new_count }} новых</small></h2><a href="{% url 'landing:crm_leads' %}">Все заявки →</a></div>{% include 'landing/office/lead_table.html' %}</section>
+<section id="history"><div class="heading"><h2>{% if visitor %}История посетителя{% else %}Переходы и клики{% endif %}</h2>
+{% if visitor %}<a href="?date={{ date }}&amp;period={{ period }}#history">Все посетители</a>{% endif %}</div>
+{% if events %}<div class="scroll"><table><thead><tr><th>Время</th><th>Посетитель</th><th>Событие</th><th>Элемент / источник</th><th>Куда</th></tr></thead><tbody>
+{% for e in events %}<tr><td>{{ e.created_at|date:"d.m.Y H:i:s" }}</td><td><a href="?visitor={{ e.visitor }}&amp;date={{ date }}&amp;period={{ period }}#history">{{ e.visitor_label }}</a></td>
+<td>{{ e.get_kind_display }}</td><td>{% if e.kind == 'view' %}{{ e.source|default:"Прямой переход" }}{% else %}{{ e.label|default:"Ссылка" }}<small>{{ e.placement }}</small>{% endif %}</td><td>{{ e.target }}</td></tr>{% endfor %}
+</tbody></table></div>{% include 'landing/office/pager.html' %}{% else %}<p class="empty">За выбранный период событий нет.</p>{% endif %}</section>{% endblock %}

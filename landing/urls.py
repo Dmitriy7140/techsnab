@@ -1,5 +1,7 @@
 from django.urls import path
-from django.contrib import admin
+from django.contrib.auth.views import LogoutView
+from django.views.generic import RedirectView
+from django.urls import reverse_lazy
 
 from . import crm, traffic, views
 
@@ -10,5 +12,16 @@ urlpatterns = [
     path('robots.txt', views.robots, name='robots'),
     path('sitemap.xml', views.sitemap, name='sitemap'),
     path('events/', traffic.record, name='events'),
-    path('crm/', admin.site.admin_view(crm.dashboard), name='crm'),
+    path('events/consent/', traffic.consent, name='consent'),
+    path('crm/', crm.dashboard, name='crm'),
+    path('crm/login/', crm.ManagerLogin.as_view(), name='crm_login'),
+    path('crm/logout/', LogoutView.as_view(next_page=reverse_lazy('landing:crm_login')), name='crm_logout'),
+    path('crm/leads/', crm.leads, name='crm_leads'),
+    path('crm/leads/<int:pk>/', crm.lead_detail, name='lead_detail'),
+    path('crm/reviews/', crm.reviews, name='crm_reviews'),
+    path('crm/reviews/<int:pk>/moderate/', crm.moderate, name='moderate'),
+    path('admin/', RedirectView.as_view(pattern_name='landing:crm')),
+    path('admin/login/', RedirectView.as_view(pattern_name='landing:crm_login')),
+    path('admin/landing/lead/', RedirectView.as_view(pattern_name='landing:crm_leads')),
+    path('admin/landing/lead/<int:pk>/change/', RedirectView.as_view(pattern_name='landing:lead_detail')),
 ]

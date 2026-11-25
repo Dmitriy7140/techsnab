@@ -37,12 +37,17 @@ services:
       ALLOWED_HOSTS: th37.ru,admin.th37.ru
       CSRF_TRUSTED_ORIGINS: https://th37.ru,https://admin.th37.ru
       SECRET_KEY: ${PRODUCTION_SECRET_KEY:?Set the production Django secret}
+      MIGRATE_REVIEWS: "1"
     volumes:
       - production_data:/var/lib/techsnab
+      - reviews_data:/var/lib/techsnab-reviews
 
   staging:
     <<: *web
     image: techsnab-staging:${STAGING_REVISION:-local}
+    depends_on:
+      production:
+        condition: service_healthy
     build:
       context: ./deploy
       additional_contexts:
@@ -51,8 +56,10 @@ services:
       ALLOWED_HOSTS: staging.th37.ru
       CSRF_TRUSTED_ORIGINS: https://staging.th37.ru
       SECRET_KEY: ${STAGING_SECRET_KEY:?Set the staging Django secret}
+      PUBLIC_REVIEWS: "1"
     volumes:
       - staging_data:/var/lib/techsnab
+      - reviews_data:/var/lib/techsnab-reviews
 
   proxy:
     image: caddy:2-alpine
@@ -75,5 +82,6 @@ services:
 volumes:
   production_data:
   staging_data:
+  reviews_data:
   caddy_data:
   caddy_config:
