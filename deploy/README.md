@@ -19,4 +19,4 @@ sudo docker compose --env-file /opt/techsnab/.env ps
 sudo docker compose --env-file /opt/techsnab/.env up --build -d --no-deps staging
 ```
 
-Принятые заявки приложение записывает в журнал своего сервиса (`production` или `staging`).
+Заявки и статистика основного сайта хранятся в SQLite в постоянном томе `production_data`. Кабинет доступен на `https://admin.th37.ru/`. Для менеджера нужны флаг Django `is_staff` и разрешения `view_lead`, `change_lead`, `view_trafficevent`. У стейджа своя база.

@@ -1,6 +1,21 @@
 th37.ru {
+	@office path /crm /crm/* /admin /admin/*
+	respond @office 404
 	encode zstd gzip
 	reverse_proxy production:8000
+}
+
+admin.th37.ru {
+	header X-Robots-Tag "noindex, nofollow"
+	encode zstd gzip
+	redir / /crm/ 302
+	@office path /crm/ /admin/* /static/*
+	handle @office {
+		reverse_proxy production:8000
+	}
+	handle {
+		respond 404
+	}
 }
 
 staging.th37.ru {

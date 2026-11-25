@@ -18,7 +18,7 @@ x-web: &web
       - |
         import http.client, os
         conn = http.client.HTTPConnection("127.0.0.1", 8000, timeout=4)
-        conn.request("HEAD", "/", headers={"Host": os.environ["ALLOWED_HOSTS"], "X-Forwarded-Proto": "https"})
+        conn.request("HEAD", "/", headers={"Host": os.environ["ALLOWED_HOSTS"].split(",")[0], "X-Forwarded-Proto": "https"})
         raise SystemExit(conn.getresponse().status != 200)
     interval: 30s
     timeout: 5s
@@ -34,8 +34,8 @@ services:
       additional_contexts:
         appsrc: ${MASTER_SOURCE:-../master}
     environment:
-      ALLOWED_HOSTS: th37.ru
-      CSRF_TRUSTED_ORIGINS: https://th37.ru
+      ALLOWED_HOSTS: th37.ru,admin.th37.ru
+      CSRF_TRUSTED_ORIGINS: https://th37.ru,https://admin.th37.ru
       SECRET_KEY: ${PRODUCTION_SECRET_KEY:?Set the production Django secret}
     volumes:
       - production_data:/var/lib/techsnab
