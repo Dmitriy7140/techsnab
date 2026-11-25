@@ -179,6 +179,8 @@ h2 { font-size: clamp(1.7rem, 3.2vw, 2.6rem); }
     padding: 3px 9px; border-radius: 999px; background: #eaf2ff; white-space: nowrap;
 }
 .card--product p { font-size: .94rem; }
+.card--product h3 a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .18em; }
+.card--product h3 a:hover { color: var(--blue); }
 
 /* ---------- Steps ---------- */
 .steps { list-style: none; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; counter-reset: step; }

@@ -1,0 +1,64 @@
+{% load static %}
+{% url 'landing:index' as home %}{% url 'landing:caustic' as product_path %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="only light">
+    <title>Каустическая сода (каустик) в Иваново оптом | Техснаб-Холдинг</title>
+    <meta name="description" content="Поставляем каустическую соду (едкий натр, NaOH) предприятиям Иваново, Ивановской области, соседних регионов и Москвы. Запросите цену с учётом объёма и адреса доставки.">
+    <meta name="keywords" content="каустик в Иваново, каустическая сода оптом, едкий натр, гидроксид натрия, поставка каустика в Москву">
+    <link rel="canonical" href="{{ site.url }}{{ product_path }}">
+    {% include 'landing/icons.html' %}
+    <link rel="stylesheet" href="{% static 'landing/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/feedback.css' %}">
+    <link rel="stylesheet" href="{% static 'landing/css/product.css' %}">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Главная", "item": "{{ site.url }}{{ home }}"},
+            {"@type": "ListItem", "position": 2, "name": "Каустическая сода", "item": "{{ site.url }}{{ product_path }}"}
+        ]
+    }
+    </script>
+</head>
+<body class="product-page">
+    <header class="product-head" id="top">
+        <div class="container product-row">
+            <a class="logo" href="{{ home }}">
+                <img class="logo__img" src="{% static 'landing/img/logo.png' %}" alt="" width="63" height="44">
+                <span class="logo__text">{{ site.company }}</span>
+            </a>
+            <a class="product-phone" href="tel:{{ site.phone_href }}">{{ site.phone }}</a>
+        </div>
+    </header>
+    <main class="container product-main">
+        <nav class="product-crumbs" aria-label="Путь по сайту">
+            <a href="{{ home }}">Главная</a><span aria-hidden="true">/</span><span aria-current="page">Каустическая сода</span>
+        </nav>
+        <section class="product-intro" id="products">
+            <h1>Каустическая сода оптом в Иваново</h1>
+            <p>Каустик, едкий натр и гидроксид натрия — названия одного вещества с формулой NaOH. Поставляем его предприятиям для водоподготовки, химической и целлюлозно-бумажной промышленности.</p>
+            <a class="btn btn--primary" href="{{ home }}#contact">Запросить цену каустика</a>
+        </section>
+        <section class="product-delivery" id="contact">
+            <h2>Поставка и расчёт стоимости</h2>
+            <p>Отгружаем из Иваново по Ивановской области, в соседние регионы и Москву. Для расчёта укажите объём партии, нужную форму каустика, адрес разгрузки и желаемую дату поставки.</p>
+            <p>Менеджер уточнит наличие, согласует упаковку или доставку наливом и рассчитает стоимость по вашему маршруту. При отгрузке предоставляем паспорт качества и сопроводительные документы.</p>
+            <a href="{{ home }}#products">Вся промышленная химия</a>
+        </section>
+    </main>
+    <footer class="product-foot">
+        <div class="container product-row">
+            <div><strong>{{ site.company_full }}</strong><br>{{ site.address }}</div>
+            <a href="mailto:{{ site.email }}">{{ site.email }}</a>
+            <a class="cookie-settings" href="?cookies=1#cookie-choice">Настройки cookie</a>
+        </div>
+    </footer>
+    {% include 'landing/consent.html' %}
+    <script src="{% static 'landing/js/traffic.js' %}" data-endpoint="{% url 'landing:events' %}"></script>
+</body>
+</html>

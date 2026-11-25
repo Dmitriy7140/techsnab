@@ -150,9 +150,41 @@ class LandingTests(TestCase):
         self.assertEqual(data['address']['addressLocality'], 'Иваново')
         self.assertIn('Москва', data['areaServed'])
         self.assertIn('href="https://th37.ru/"', html)
+        path = reverse('landing:caustic')
+        self.assertIn(f'<a href="{path}">Каустическая сода (едкий натр)</a>', html)
+        product = self.client.get(path)
+        self.assertContains(product, '<h1>Каустическая сода оптом в Иваново</h1>')
+        self.assertContains(product, f'<link rel="canonical" href="https://th37.ru{path}">', html=True)
+        self.assertContains(product, 'href="/#contact"')
+        breadcrumbs = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', product.content.decode(), re.S)[1])
+        self.assertEqual(breadcrumbs['itemListElement'][-1]['item'], 'https://th37.ru' + path)
         self.assertContains(self.client.get('/robots.txt'), 'Sitemap: https://th37.ru/sitemap.xml')
         root = ElementTree.fromstring(self.client.get('/sitemap.xml').content)
-        self.assertEqual([el.text for el in root.findall('.//{*}loc')], ['https://th37.ru/'])
+        self.assertCountEqual([el.text for el in root.findall('.//{*}loc')], ['https://th37.ru/', 'https://th37.ru' + path])
+
+    def test_consent_and_clicks_on_product_page(self):
+        path = reverse('landing:caustic')
+        self.assertContains(self.client.get(path), f'name="page" value="{path}"')
+        self.assertFalse(FirstVisit.objects.exists())
+        result = self.client.post('/events/consent/', {'choice': 'allow', 'page': path})
+        self.assertRedirects(result, path)
+        self.assertEqual(TrafficEvent.objects.get(kind='view').target, path)
+        for target in (path, '/#contact'):
+            response = self.client.post('/events/', {'kind': 'click', 'id': uuid4(), 'target': target})
+            self.assertEqual(response.status_code, 204)
+        self.assertEqual(FirstVisit.objects.count(), 1)
+        self.assertEqual(TrafficEvent.objects.filter(kind='click').count(), 2)
+        result = self.client.post('/events/consent/', {'choice': 'deny', 'page': 'https://example.org/'})
+        self.assertRedirects(result, '/')
+
+    def test_phone_format_for_new_leads(self):
+        for value in ('9109854120', '8 (910) 985 41 20', '+7-910-985-41-20', '+375 29 123 45 67'):
+            self.client.post('/', {'name': 'Клиент', 'phone': value})
+            expected = value if value.startswith('+375') else '+7 (910) 985-41-20'
+            self.assertEqual(Lead.objects.latest('pk').phone, expected)
+        response = self.client.post('/', {'name': 'Клиент', 'phone': '+7 ('})
+        self.assertContains(response, 'Введите номер телефона.')
+        self.assertEqual(Lead.objects.count(), 4)
 
 
 @override_settings(STORAGES=STATIC, PUBLIC_REVIEWS=True)
@@ -165,6 +197,7 @@ class ReviewTests(TestCase):
                 'review-comment': 'Получили документы', 'review-submission_id': str(uuid4())}
         page = guest.get('/')
         self.assertContains(page, 'Оставить отзыв')
+        self.assertNotContains(page, 'Отзыв появится после одобрения модератором.')
         self.assertNotContains(page, 'name="review-review_date"')
         self.assertEqual(guest.post('/', {**data, 'review-rating': 6}).status_code, 200)
         self.assertFalse(Review.objects.exists())

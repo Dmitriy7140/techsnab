@@ -2,6 +2,7 @@
     <h2 id="cookie-title">Разрешить cookie для статистики?</h2>
     <p>Они помогают считать уникальных посетителей и клики. Отправить заявку можно при любом выборе.</p>
     <form action="{% url 'landing:consent' %}" method="post">{% csrf_token %}
+        <input type="hidden" name="page" value="{{ request.path }}">
         <button name="choice" value="allow">Разрешить</button>
         <button name="choice" value="deny">Отказаться</button>
     </form>

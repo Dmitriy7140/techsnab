@@ -16,7 +16,7 @@ from .traffic import consent_state, visitor_id
 # Каталог продукции — наименование, формула/маркировка, применение.
 PRODUCTS = [
     {
-        'icon': 'drop', 'name': 'Натр едкий (сода каустическая)', 'formula': 'NaOH',
+        'icon': 'drop', 'name': 'Каустическая сода (едкий натр)', 'formula': 'NaOH', 'page': 'landing:caustic',
         'use': 'Для целлюлозно-бумажной, химической и нефтяной промышленности, водоподготовки.',
     },
     {
@@ -119,7 +119,6 @@ def index(request):
             return redirect(f"{request.path}#contact")
 
     context = {
-        'site': settings.SITE,
         'form': form,
         'products': PRODUCTS,
         'steps': STEPS,
@@ -127,11 +126,20 @@ def index(request):
         'stats': STATS,
         'review_form': review_form,
         'published': published,
-        'consent_state': consent_state(request),
     }
-    response = render(request, 'landing/index.html', context)
+    return public_page(request, 'landing/index.html', context)
+
+
+def public_page(request, template, context=None):
+    response = render(request, template, {
+        'site': settings.SITE, 'consent_state': consent_state(request), **(context or {}),
+    })
     response.headers['Cache-Control'] = 'private, no-store'
     return response
+
+
+def caustic(request):
+    return public_page(request, 'landing/caustic.html')
 
 
 def robots(request):
