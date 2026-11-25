@@ -148,6 +148,7 @@ STORAGES = {
 
 # Contact details shown across the landing.
 SITE = {
+    'url': 'https://th37.ru',
     'company': 'ТЕХСНАБ-ХОЛДИНГ',
     'company_full': 'ООО «ТЕХСНАБ-ХОЛДИНГ»',
     'tagline': 'Поставка химической продукции',

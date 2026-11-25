@@ -4,6 +4,7 @@ from django import forms
 class RequestForm(forms.Form):
     """Заявка на расчёт стоимости перевозки."""
 
+    submission_id = forms.UUIDField(required=False, widget=forms.HiddenInput)
     name = forms.CharField(
         max_length=120,
         widget=forms.TextInput(attrs={'placeholder': 'Ваше имя'}),
@@ -20,6 +21,7 @@ class RequestForm(forms.Form):
         ),
     )
     comment = forms.CharField(
+        max_length=10000,
         required=False,
         widget=forms.Textarea(
             attrs={'placeholder': 'Маршрут, объём, сроки', 'rows': 3}

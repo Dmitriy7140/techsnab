@@ -27,7 +27,7 @@
     --blue-hover: #154565;
     --rule: #bbc8cd;
     --edge: #788d96;
-    --gutter: clamp(20px, 4.5vw, 72px);
+    --gutter: clamp(24px, 6.25vw, 72px);
     background: var(--paper);
     color: var(--ink);
     font-family: 'Manrope', system-ui, 'Segoe UI', sans-serif;
@@ -124,14 +124,14 @@ h3 { font-size: 1.25rem; letter-spacing: -.025em; }
 .hero__lead { max-width: 55ch; margin-top: 24px; color: var(--text); font-size: clamp(1rem, 1.25vw, 1.125rem); }
 .hero__cta { display: flex; flex-wrap: wrap; align-items: stretch; gap: 10px; margin-top: 30px; }
 .hero__cta .btn--primary span { font-size: 1.3em; line-height: 1; }
-.hero__figure { border: 1px solid var(--edge); background: var(--wash); }
-.hero__figure img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
-.hero__figure figcaption {
-    display: flex; align-items: center; gap: 10px;
+.truck-photo { border: 1px solid var(--edge); background: var(--wash); }
+.truck-photo img { width: 100%; height: auto; }
+.truck-photo figcaption {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px 14px;
     padding: 11px 16px; border-top: 1px solid var(--edge);
     color: var(--text); font-size: .8125rem; font-weight: 700;
 }
-.hero__figure .icon { color: var(--blue); font-size: 1.05rem; }
+.truck-photo a { text-decoration: underline; text-underline-offset: .16em; }
 
 .stats { background: var(--wash); border-block: 1px solid var(--edge); }
 .stats__grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -228,7 +228,6 @@ h3 { font-size: 1.25rem; letter-spacing: -.025em; }
     .header__cta-short { display: inline; }
     .hero__inner, .contact__inner { grid-template-columns: 1fr; }
     .hero h1 { font-size: clamp(2.25rem, 7.4vw, 3.5rem); }
-    .hero__figure img { aspect-ratio: 16 / 10; }
     .footer__inner { grid-template-columns: 1fr 1fr; }
     .footer__brand { grid-column: 1 / -1; }
 }
