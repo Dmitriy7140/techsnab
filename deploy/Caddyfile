@@ -5,6 +5,9 @@ th37.ru {
 
 staging.th37.ru {
 	header X-Robots-Tag "noindex, nofollow"
+	basic_auth {
+		import /etc/caddy/staging-users
+	}
 	encode zstd gzip
 	reverse_proxy staging:8000
 }

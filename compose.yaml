@@ -63,6 +63,12 @@ services:
       - "443:443/udp"
     volumes:
       - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - type: bind
+        source: /opt/techsnab/auth/staging-users
+        target: /etc/caddy/staging-users
+        read_only: true
+        bind:
+          create_host_path: false
       - caddy_data:/data
       - caddy_config:/config
 

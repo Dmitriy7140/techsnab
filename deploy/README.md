@@ -4,6 +4,8 @@ Compose запускает приложение из `master` на `th37.ru` и 
 
 На VPS файлы активных версий доступны в `/opt/techsnab/master` и `/opt/techsnab/staging`. Файл `/opt/techsnab/.env` содержит `MASTER_SOURCE` с абсолютным путём к исходникам основной версии, метки образов `PRODUCTION_REVISION` и `STAGING_REVISION`, а также два отдельных случайных значения `PRODUCTION_SECRET_KEY` и `STAGING_SECRET_KEY`.
 
+Для входа на стейдж Caddy читает файл `/opt/techsnab/auth/staging-users`. В нём одна строка с логином и bcrypt-хешем, разделёнными пробелом. Хеш можно получить командой `caddy hash-password`. При замене файла по новому inode пересоздайте сервис `proxy`, чтобы обновить bind mount.
+
 Сборка и проверка выполняются из каталога активной версии `staging`.
 
 ```sh
