@@ -153,5 +153,9 @@ def sitemap(request):
     return render(request, 'landing/sitemap.xml', {'site': settings.SITE}, content_type='application/xml')
 
 
+def indexnow_key(request):
+    return HttpResponse(settings.INDEXNOW_KEY, content_type='text/plain; charset=utf-8')
+
+
 def favicon(request):
     return redirect(static('landing/img/favicon.ico'))

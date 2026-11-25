@@ -1,7 +1,7 @@
 {% load static %}
 <title>Промышленная химия в Иваново оптом — каустик и реагенты | Техснаб-Холдинг</title>
 <meta name="description" content="Промышленная химия со склада в Иваново: каустическая сода (едкий натр), перекись водорода, кислоты и удобрения. Оптовые поставки по области, в соседние регионы и Москву.">
-<meta name="keywords" content="промышленная химия в Иваново, каустик в Иваново, каустическая сода оптом, химическое сырьё, поставка реагентов в Москву">
+<meta name="keywords" content="Иваново химия, промышленная химия в Иваново, химическое сырьё оптом, Иваново каустик, каустическая сода оптом, перекись водорода в Иваново, поставка реагентов в Москву">
 <link rel="canonical" href="{{ site.url }}/">
 <script type="application/ld+json">
 {
@@ -14,7 +14,8 @@
     "logo": "{{ site.url }}{% static 'landing/img/logo.png' %}",
     "telephone": "{{ site.phone_href|escapejs }}",
     "email": "{{ site.email|escapejs }}",
-    "description": "Поставка промышленной химии и реагентов из Иваново наливом и в таре.",
+    "description": "Оптовая поставка каустической соды, перекиси водорода, кислот и реагентов из Иваново.",
+    "hasMap": "{{ site.map_url|escapejs }}",
     "address": {
         "@type": "PostalAddress",
         "postalCode": "153000",
@@ -24,5 +25,16 @@
         "addressCountry": "RU"
     },
     "areaServed": ["Иваново", "Ивановская область", "Москва"]
+}
+</script>
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "@id": "{{ site.url }}/#website",
+    "url": "{{ site.url }}/",
+    "name": "Техснаб-Холдинг",
+    "inLanguage": "ru",
+    "publisher": {"@id": "{{ site.url }}/#company"}
 }
 </script>

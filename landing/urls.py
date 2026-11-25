@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.urls import path
 from django.contrib.auth.views import LogoutView
 from django.views.generic import RedirectView
@@ -13,6 +14,7 @@ urlpatterns = [
     path('favicon.ico', views.favicon, name='favicon'),
     path('robots.txt', views.robots, name='robots'),
     path('sitemap.xml', views.sitemap, name='sitemap'),
+    path(f'{settings.INDEXNOW_KEY}.txt', views.indexnow_key, name='indexnow_key'),
     path('events/', traffic.record, name='events'),
     path('events/consent/', traffic.consent, name='consent'),
     path('crm/', crm.dashboard, name='crm'),
