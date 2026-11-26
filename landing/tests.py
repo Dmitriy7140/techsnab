@@ -271,6 +271,6 @@ class ReviewTests(TestCase):
         self.assertEqual(Review.objects.get(submission_id=pending['review-submission_id']).status, Review.Status.PENDING)
 
     @override_settings(PUBLIC_REVIEWS=False)
-    def test_review_submissions_are_staging_only(self):
+    def test_review_submissions_require_public_reviews_to_be_enabled(self):
         self.assertNotContains(self.client.get('/'), 'Оставить отзыв')
         self.assertEqual(self.client.post('/', {'form_kind': 'review'}).status_code, 404)

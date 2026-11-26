@@ -161,6 +161,7 @@ INDEXNOW_KEY = '997c3accc5335bfae77298db7d9b3fa4'
 
 SITE = {
     'url': 'https://th37.ru',
+    'truck_photo_url': 'https://www.flickr.com/photos/99460566@N06/52219074527/',
     'company': 'ТЕХСНАБ-ХОЛДИНГ',
     'company_full': 'ООО «ТЕХСНАБ-ХОЛДИНГ»',
     'tagline': 'Поставка химической продукции',

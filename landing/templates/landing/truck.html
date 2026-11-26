@@ -1,6 +1,8 @@
 {% load static %}
-<figure class="truck-photo">
-    <a href="https://commons.wikimedia.org/?curid=78303301" target="_blank" rel="external noopener" aria-label="Открыть оригинал фотографии Scania R 730 автора Lav Ulv в новой вкладке">
-        <img src="{% static 'landing/img/scania-r730.webp' %}" width="1200" height="799" alt="Голубая Scania R 730 с полуприцепом-цистерной HOYER" fetchpriority="high">
+<figure class="truck-photo" itemscope itemtype="https://schema.org/ImageObject">
+    <meta itemprop="creditText" content="Lav Ulv, CC BY 2.0">
+    <link itemprop="license" href="https://creativecommons.org/licenses/by/2.0/">
+    <a itemprop="sameAs" href="{{ site.truck_photo_url }}" target="_blank" rel="external noopener" aria-label="Открыть оригинал фотографии Lav Ulv на Flickr в новой вкладке">
+        <img itemprop="contentUrl" src="{% static 'landing/img/scania-p450-port.webp' %}" width="1024" height="683" alt="Синяя Scania P 450 с голубой цистерной на фоне контейнеров и склада в грузовом порту" fetchpriority="high">
     </a>
 </figure>

@@ -91,6 +91,8 @@ def record(request):
             '#products', '#how', '#why', '#contact', '#reviews', '#top', 'menu', 'request-form', 'review-form', 'review-page',
             'tel:' + site['phone_href'], 'tel:' + site['phone_city_href'], 'mailto:' + site['email'],
             site['map_url'],
+            site['truck_photo_url'],
+            # Keep recording links from pages opened before the photo was replaced.
             'https://commons.wikimedia.org/?curid=78303301', 'https://creativecommons.org/licenses/by/2.0/',
         }
         if data.get('target') not in targets:

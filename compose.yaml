@@ -37,6 +37,7 @@ services:
       ALLOWED_HOSTS: th37.ru,admin.th37.ru
       CSRF_TRUSTED_ORIGINS: https://th37.ru,https://admin.th37.ru
       SECRET_KEY: ${PRODUCTION_SECRET_KEY:?Set the production Django secret}
+      PUBLIC_REVIEWS: "1"
       MIGRATE_REVIEWS: "1"
     volumes:
       - production_data:/var/lib/techsnab
