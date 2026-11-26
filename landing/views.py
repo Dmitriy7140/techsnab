@@ -132,7 +132,10 @@ def index(request):
 
 def public_page(request, template, context=None):
     response = render(request, template, {
-        'site': settings.SITE, 'consent_state': consent_state(request), **(context or {}),
+        'site': settings.SITE,
+        'is_canonical_site': request.build_absolute_uri('/') == settings.SITE['url'] + '/',
+        'consent_state': consent_state(request),
+        **(context or {}),
     })
     response.headers['Cache-Control'] = 'private, no-store'
     return response
